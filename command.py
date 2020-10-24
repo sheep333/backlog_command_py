@@ -3,16 +3,16 @@ import json
 import os
 import pandas as pd
 
-from pybacklogpy.BacklogConfigure import BacklogJpConfigure
+from pybacklogpy.BacklogConfigure import BacklogJpConfigure, BacklogComConfigure
 from pybacklogpy.Issue import Issue
 from pybacklogpy.Project import Project
 from pybacklogpy.User import User
 from pybacklogpy.Wiki import Wiki
 
-SPACE_KEY = os.getenv('SPACE_KEY')
+SPACE_KEY = str(os.getenv('SPACE_KEY'))
 API_KEY = os.getenv('API_KEY')
 
-config = BacklogJpConfigure(space_key=SPACE_KEY, api_key=API_KEY)
+config = BacklogComConfigure(space_key=SPACE_KEY, api_key=API_KEY)
 issue_api = Issue(config)
 project_api = Project(config)
 user_api = User(config)
@@ -51,10 +51,9 @@ class Command:
         )
 
         self.args = parser.parse_args()
-        print(self.args.values)
 
     def exec(self):
-        data = eval(self.args.command)(self.args)
+        data = eval(f'self.{self.args.command}')(self.args)
         self._create_output_file(data)
 
     def _create_output_file(self, data):
@@ -63,19 +62,20 @@ class Command:
             df.to_csv(f"{self.args.dir}{self.args.command}.csv")
         elif self.args.output == "json":
             data_file = open(f'{self.args.dir}{self.args.command}.json', 'w')
+            data = json.load(data)
             json.dump(data, data_file, indent=2)
 
-    def get_users(self):
-        return self.user_api.get_user_list()
+    def get_users(self, args):
+        return user_api.get_user_list()
 
-    def get_issues(self):
-        return self.issue_api.get_issue_list()
+    def get_issues(self, args):
+        return issue_api.get_issue_list()
 
-    def get_projects(self):
-        return self.project_api.get_project_list()
+    def get_projects(self, args):
+        return project_api.get_project_list()
 
-    def get_project_issues(self):
-        return self.issue_api.get_issue_list(project_id=self.args.project)
+    def get_project_issues(self, args):
+        return issue_api.get_issue_list(project_id=self.args.project)
 
-    def get_project_users(self):
-        return self.project_api.get_project_user_list(project_id=self.args.project)
+    def get_project_users(self, args):
+        return project_api.get_project_user_list(project_id=self.args.project)
