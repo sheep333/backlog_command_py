@@ -4,19 +4,25 @@ import os
 import pandas as pd
 
 from pybacklogpy.BacklogConfigure import BacklogComConfigure
-from pybacklogpy.Issue import Issue
+from pybacklogpy.Issue import Issue, IssueAttachment, IssueComment, IssueSharedFile
 from pybacklogpy.Project import Project
 from pybacklogpy.User import User
-from pybacklogpy.Wiki import Wiki
+from pybacklogpy.Wiki import Wiki, WikiAttachment, WikiSharedFile
 
 SPACE_KEY = str(os.getenv('SPACE_KEY'))
 API_KEY = os.getenv('API_KEY')
 
 config = BacklogComConfigure(space_key=SPACE_KEY, api_key=API_KEY)
+# TODO: パッチを当てたので、引数にoutput用のディレクトリを追加
 issue_api = Issue(config)
+issue_attachment_api = IssueAttachment(config)
+issue_comment_api = IssueComment(config)
+issue_sharedfile_api = IssueSharedFile(config)
 project_api = Project(config)
 user_api = User(config)
 wiki_api = Wiki(config)
+wiki_attachment_api = WikiAttachment(config)
+wiki_sharedfile_api = WikiSharedFile(config)
 
 
 class Command:
@@ -32,6 +38,7 @@ class Command:
                 'get_projects',
                 'get_project_issues',
                 'get_project_users',
+                'get_project_data'
             ]
         )
         parser.add_argument('-u', '--user', type=int, help='ユーザーID')
@@ -53,9 +60,12 @@ class Command:
         self.args = parser.parse_args()
 
     def exec(self):
-        response = eval(f'self.{self.args.command}')()
-        data = json.loads(response.content.decode('utf-8'))
-        self._create_output_file(data)
+        if self.args.command != 'get_project_data':
+            response = eval(f'self.{self.args.command}')()
+            data = json.loads(response.content.decode('utf-8'))
+            self._create_output_file(data)
+        # else:
+        # TODO: それぞれを結び付けてJSONにするかdictにしてテンプレートを作成するか何かする
 
     def _create_output_file(self, data):
         if self.args.output == "csv":
@@ -80,3 +90,21 @@ class Command:
 
     def get_project_users(self):
         return project_api.get_project_user_list(project_id=self.args.project)
+
+    def get_project_data(self):
+        issues = issue_api.get_issue_list(project_id=self.args.project)
+        wikis = wiki_api.get_wiki_page_list(project_id=self.args.project)
+        users = project_api.get_project_user_list(project_id=self.args.project)
+
+        comments = []
+        for issue in issues:
+            issue_attachment_api.get_list_of_issue_attachments(issue_id_or_key=issue['id'])
+            issue_sharedfile_api.get_list_of_linked_shared_files(issue_id_or_key=issue['id'])
+            comment = issue_comment_api.get_comment_list(issue_id_or_key=issue['id'])
+            comments.append(comment)
+
+        for wiki in wikis:
+            wiki_attachment_api.get_list_of_wiki_attachments(wiki_id=wiki['id'])
+            wiki_sharedfile_api.get_list_of_shared_files_on_wiki(wiki_id=wiki['id'])
+
+        return issues, wikis, users, comments
