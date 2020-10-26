@@ -1,4 +1,5 @@
 from command import Command
+from monkey_patch import apply_patch
 
 
 def main():
@@ -15,7 +16,7 @@ def main():
     アウトプットの形式
         csv, json
     """
-
+    apply_patch()
     command = Command()
     command.exec()
 
