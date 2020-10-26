@@ -3,7 +3,7 @@ import json
 import os
 import pandas as pd
 
-from pybacklogpy.BacklogConfigure import BacklogJpConfigure, BacklogComConfigure
+from pybacklogpy.BacklogConfigure import BacklogComConfigure
 from pybacklogpy.Issue import Issue
 from pybacklogpy.Project import Project
 from pybacklogpy.User import User
@@ -53,7 +53,8 @@ class Command:
         self.args = parser.parse_args()
 
     def exec(self):
-        data = eval(f'self.{self.args.command}')(self.args)
+        response = eval(f'self.{self.args.command}')()
+        data = json.loads(response.content.decode('utf-8'))
         self._create_output_file(data)
 
     def _create_output_file(self, data):
@@ -61,21 +62,21 @@ class Command:
             df = pd.DataFrame(data)
             df.to_csv(f"{self.args.dir}{self.args.command}.csv")
         elif self.args.output == "json":
-            data_file = open(f'{self.args.dir}{self.args.command}.json', 'w')
-            data = json.load(data)
-            json.dump(data, data_file, indent=2)
+            for index, d in enumerate(data):
+                data_file = open(f'{self.args.dir}{self.args.command}_{index}.json', 'w')
+                json.dump(data, data_file, ensure_ascii=False, indent=2)
 
-    def get_users(self, args):
+    def get_users(self):
         return user_api.get_user_list()
 
-    def get_issues(self, args):
+    def get_issues(self):
         return issue_api.get_issue_list()
 
-    def get_projects(self, args):
+    def get_projects(self):
         return project_api.get_project_list()
 
-    def get_project_issues(self, args):
+    def get_project_issues(self):
         return issue_api.get_issue_list(project_id=self.args.project)
 
-    def get_project_users(self, args):
+    def get_project_users(self):
         return project_api.get_project_user_list(project_id=self.args.project)
