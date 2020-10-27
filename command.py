@@ -38,6 +38,8 @@ class Command:
                 'get_projects',
                 'get_project_issues',
                 'get_project_users',
+                'get_issue_comments',
+                'get_wiki_page_list',
                 'get_project_data'
             ]
         )
@@ -90,6 +92,12 @@ class Command:
 
     def get_project_users(self):
         return project_api.get_project_user_list(project_id=self.args.project)
+
+    def get_issue_comments(self):
+        return issue_comment_api.get_comment_list(issue_id_or_key=8810734)
+
+    def get_wiki_page_list(self):
+        return wiki_api.get_wiki_page_list(project_id_or_key=self.args.project)
 
     def get_project_data(self):
         issues = issue_api.get_issue_list(project_id=self.args.project)
