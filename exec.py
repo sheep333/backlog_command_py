@@ -18,7 +18,7 @@ def main():
     アウトプットの形式
         csv, json
     """
-    apply_patch()
+    # apply_patch()
     command = Command()
     command.exec()
 
