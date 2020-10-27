@@ -1,327 +1,281 @@
 <!DOCTYPE html>
 <html lang="ja" class="">
+
 <head>
-	<meta charset="UTF-8">
-	<meta http-equiv="x-ua-compatible" content="ie=edge">
-	<meta name="viewport" content="width=1080">
-	<meta name="referrer" content="no-referrer">
-	<link rel="stylesheet" type="text/css" media="all" href="../css/tooltipster.bundle.min.css">
-	<link rel="stylesheet" type="text/css" media="all" href="../css/Issue.css">
-	<link rel="stylesheet" type="text/css" media="all" href="../css/introjs.css">
-	<link rel="stylesheet" type="text/css" media="all" href="../css/introjs-flattener.css">
-	<title>[PROJECT1] 課題の一覧</title>
+  <meta charset="UTF-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=1080">
+  <meta name="referrer" content="no-referrer">
+  <link rel="stylesheet" type="text/css" media="all" href="../css/tooltipster.bundle.min.css">
+  <link rel="stylesheet" type="text/css" media="all" href="../css/Issue.css">
+  <link rel="stylesheet" type="text/css" media="all" href="../css/introjs.css">
+  <link rel="stylesheet" type="text/css" media="all" href="../css/introjs-flattener.css">
+  <title>{{ project.key }} 課題の詳細</title>
 </head>
+
 <body class="Page--view-issue theme-default ">
-	<header id="project-header" class="content-header" aria-label="プロジェクトヘッダー">
-		<div class="content-header__inner project-header">
-			<div class="header-icon-set project-header__summary">
-				<div class="header-icon-set__icon"><a href="/projects/PROJECT1">
-						<img src="/SpaceImage.action" alt="project logo" class="header-icon-set__image">
-					</a></div>
-				<h1 class="header-icon-set__text"><span class="header-icon-set__name">project1</span><span class="header-icon-set__key">(PROJECT1)</span></h1>
-			</div>
-		</div><!-- End content-header__inner -->
-	</header><!-- End content-header -->
-	<div class="content-main -with-head-line-pager -with-foot-space">
-		<div id="issueArea">
-			<div class="ticket js_ticket-collapsed">
-				<div class="ticket__header" data-bind="with: issueDetail">
-					<div class="ticket__key -has-button">
-						<span class="pill pill--issue-type-7" data-bind="css:issueTypeStyle, text: issueType">タスク</span>
-						<span class="ticket__key-number" data-bind="text: key">PROJECT1-1</span>
-						<wrapped-copy-button params="{copyButtonParam:$root.copyIssueKeyButton, toolTip:'課題キーと件名をクリップボードにコピーします。Shiftキーを押しながらクリックすると課題キーのみがコピーされます。', css:'ticket__key-copy'}"><span id="copyKey-help" class="copy-key-btn ticket__key-copy" data-bind="css:css"><a href="javascript:void(0)" role="button" data-bind="css: buttonCss, attr:{'data-tooltip':toolTip}, click:doCopy" class="icon-button icon-button--default | simptip-position-right simptip-movable simptip-smooth simptip-multiline -copy-button-multiline" data-tooltip="課題キーと件名をクリップボードにコピーします。Shiftキーを押しながらクリックすると課題キーのみがコピーされます。"><span class="_assistive-text" data-bind="text:toolTip">課題キーと件名をクリップボードにコピーします。Shiftキーを押しながらクリックすると課題キーのみがコピーされます。</span><span class="copy-trigger"><svg role="image" class="icon -medium ">
-											<use xlink:href="/images/svg/sprite.symbol.svg#icon_copy"></use>
-										</svg></span><span id="copyKey" data-bind="copyButton: copyButtonParam"></span></a></span></wrapped-copy-button>
-					</div>
-					<div class="ticket__date">
-						<span class="ticket__date-item">
-							<span>開始日</span><!-- ko text: startDate() || '-' -->-
-							<!-- /ko -->
-						</span>
-						<span class="over-due ticket__date-item">
-							<span>期限日</span><!-- ko text: limitDate() || '-' -->-
-							<!-- /ko --><span data-bind="visible:isOverDue" aria-label="期限切れ" style="display:none">
-								<svg role="image" class="icon -medium over-due__icon">
-									<use xlink:href="/images/svg/sprite.symbol.svg#icon_fire"></use>
-								</svg></span>
-						</span>
-						<span data-bind="text: status, css:statusLabelClass" class="status-label status-label--1">未対応</span>
-					</div>
-				</div><!-- End ticket__header -->
-				<div class="ticket__title-group title-group -ticket">
-					<h2 id="summary" class="ticket__title title-group__title -three-actions" data-bind="with: issueDetail">
-						<span class="title-group__title-text" data-bind="text: summary, highlight:{'global-search-keyword-highlight': $root.query}">issue1</span>
-					</h2>
-				</div>
-				<div id="issuecard" class="card card--default ticket__content -has-see-all" data-bind="with: issueDetail">
-					<div class="ticket__article" data-bind="highlight:{'star-comment-highlight': {words: highlightWords, exclude: 'star'}}">
-						<div class="ticket__article-header">
-							<div class="user-icon-set -collapsed-trigger">
-								<span class="user-icon-set__user-icon">
-									<a href="/user/okCQWN8VXt" title="ANNAI_Sato" data-bind="attr: {href: creatorLink, title: creatorName }"><img class="image image--circle -x-large" src="/NulabAccountIcon.action?userId=325620&amp;name=large" data-bind="attr:{ src: creatorIcon}"></a>
-								</span>
-								<span class="user-icon-set__text -collapsed-trigger" data-bind="toggle:{toggleClass:'is_description-collapsed', target:'.js_ticket-collapsed'}">
-									<span class="user-icon-set__name" data-bind="text: creatorName">ANNAI_Sato</span><br>
-									<span class="user-icon-set__sub-line"><span>登録日</span><!-- ko text: createdOn -->2020/10/24 15:08:56
-										<!-- /ko -->
-										<span class="ticket__collapsed-summary-separator">/</span><span class="ticket__collapsed-summary" data-bind="text: pureDescription">issue1</span>
-									</span>
-								</span>
-							</div>
-							<div class="ticket__article-actions">
-								<button type="button" data-bind="click: quoteIssueDescription, clickBubble: false, visible: description" class="icon-button icon-button--default ticket__quote -with-text" style="">
-									<svg role="image" class="icon -medium">
-										<use xlink:href="/images/svg/sprite.symbol.svg#icon_quote"></use>
-									</svg>
-									<span class="_assistive-text">引用</span>
-								</button>
-								<star params="{starJsons:starJsons, starUrl:starUrl, projectId: starProjectId, title: starTitle,
+  <header id="project-header" class="content-header" aria-label="プロジェクトヘッダー">
+    <div class="content-header__inner project-header">
+      <div class="header-icon-set project-header__summary">
+        <div class="header-icon-set__icon">
+          <a href="/projects/PROJECT1">
+            <img src="/SpaceImage.action" alt="project logo" class="header-icon-set__image">
+          </a>
+        </div>
+        <h1 class="header-icon-set__text"><span class="header-icon-set__name">{{ project.name }}</span><span class="header-icon-set__key">{{ project.key }}</span></h1>
+      </div>
+    </div><!-- End content-header__inner -->
+  </header><!-- End content-header -->
+  <div class="content-main -with-head-line-pager -with-foot-space">
+    <div id="issueArea">
+      <div class="ticket js_ticket-collapsed">
+        <div class="ticket__header" data-bind="with: issueDetail">
+          <div class="ticket__key -has-button">
+            <span class="pill pill--issue-type-7" data-bind="css:issueTypeStyle, text: issueType">{{ issue.issueType.name }}</span>
+            <span class="ticket__key-number" data-bind="text: key">{{ issue.issueKey }}</span>
+            <wrapped-copy-button params="{copyButtonParam:$root.copyIssueKeyButton, toolTip:'課題キーと件名をクリップボードにコピーします。Shiftキーを押しながらクリックすると課題キーのみがコピーされます。', css:'ticket__key-copy'}"><span id="copyKey-help" class="copy-key-btn ticket__key-copy" data-bind="css:css"><a href="javascript:void(0)" role="button" data-bind="css: buttonCss, attr:{'data-tooltip':toolTip}, click:doCopy" class="icon-button icon-button--default | simptip-position-right simptip-movable simptip-smooth simptip-multiline -copy-button-multiline" data-tooltip="課題キーと件名をクリップボードにコピーします。Shiftキーを押しながらクリックすると課題キーのみがコピーされます。"><span class="_assistive-text" data-bind="text:toolTip">課題キーと件名をクリップボードにコピーします。Shiftキーを押しながらクリックすると課題キーのみがコピーされます。</span><span class="copy-trigger"><svg role="image" class="icon -medium ">
+                      <use xlink:href="/images/svg/sprite.symbol.svg#icon_copy"></use>
+                    </svg></span><span id="copyKey" data-bind="copyButton: copyButtonParam"></span></a></span></wrapped-copy-button>
+          </div>
+          <div class="ticket__date">
+            <span class="ticket__date-item">
+              <span>開始日</span>{{ issue.startDate }}
+            </span>
+            <span class="over-due ticket__date-item">
+              <span>期限日</span>{{ issue.dueDate }}
+              <svg role="image" class="icon -medium over-due__icon">
+                <use xlink:href="/images/svg/sprite.symbol.svg#icon_fire"></use>
+              </svg></span>
+            </span>
+            <span data-bind="text: status, css:statusLabelClass" class="status-label status-label--1">{{ issue.status.name }}</span>
+          </div>
+        </div><!-- End ticket__header -->
+        <div class="ticket__title-group title-group -ticket">
+          <h2 id="summary" class="ticket__title title-group__title -three-actions" data-bind="with: issueDetail">
+            <span class="title-group__title-text" data-bind="text: summary, highlight:{'global-search-keyword-highlight': $root.query}">{{ issue.summary }}</span>
+          </h2>
+        </div>
+        <div id="issuecard" class="card card--default ticket__content -has-see-all" data-bind="with: issueDetail">
+          <div class="ticket__article" data-bind="highlight:{'star-comment-highlight': {words: highlightWords, exclude: 'star'}}">
+            <div class="ticket__article-header">
+              <div class="user-icon-set -collapsed-trigger">
+                <span class="user-icon-set__user-icon">
+                  <a href="/user/okCQWN8VXt" title="ANNAI_Sato" data-bind="attr: {href: creatorLink, title: creatorName }"><img class="image image--circle -x-large" src="/NulabAccountIcon.action?userId=325620&amp;name=large" data-bind="attr:{ src: creatorIcon}"></a>
+                </span>
+                <span class="user-icon-set__text -collapsed-trigger" data-bind="toggle:{toggleClass:'is_description-collapsed', target:'.js_ticket-collapsed'}">
+                  <span class="user-icon-set__name" data-bind="text: creatorName">{{}}</span><br>
+                  <span class="user-icon-set__sub-line"><span>登録日</span>{{ issue.createdUser.name }}
+                    <span class="ticket__collapsed-summary-separator">/</span><span class="ticket__collapsed-summary" data-bind="text: pureDescription">{{ issue.summary }}</span>
+                  </span>
+                </span>
+              </div>
+              <div class="ticket__article-actions">
+                <button type="button" data-bind="click: quoteIssueDescription, clickBubble: false, visible: description" class="icon-button icon-button--default ticket__quote -with-text" style="">
+                  <svg role="image" class="icon -medium">
+                    <use xlink:href="/images/svg/sprite.symbol.svg#icon_quote"></use>
+                  </svg>
+                  <span class="_assistive-text">引用</span>
+                </button>
+                <star params="{starJsons:starJsons, starUrl:starUrl, projectId: starProjectId, title: starTitle,
                           awardId: starAwardId, highlightWordsObserver: highlightWords}"><span class="star-wrapper">
-										<button type="button" tabindex="0" class="icon-button icon-button--default star-button" data-bind="click:addStar, css:css, event:{mouseout: blur, mouseover: calcStarListPosition}">
-											<span class="star-button__icon__animation-sets js-star-button__icon__animation-sets">
-												<span class="star-button__icon__animation-set js-star-button__icon__animation-set">
-													<span class="star-button__icon"><span class="star-button__icon-inner"><span class="star-button__icon-inner-2"><svg role="image" class="icon -medium" data-bind="css: starModifier">
-																	<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/images/svg/sprite.symbol.svg#icon_star"></use>
-																</svg></span></span></span>
-												</span>
-											</span>
-											<span class="_assistive-text">スター</span>
-											<span class="star-button__number" data-bind="text:starCount" aria-live="polite">0</span>
-										</button>
-										<!-- ko if: starJsons().length -->
-										<!-- /ko -->
-									</span></star>
-							</div>
-						</div><!-- END ticket__article-header -->
-						<div class="ticket__description loom" id="issueDescription" data-bind="embed: description, highlight:{'global-search-keyword-highlight': $root.query}, checklist: description">
-							<div class="markdown-body">
-								<p>issue1</p>
-							</div>
-						</div>
-					</div><!-- End ticket__article -->
-					<div class="ticket__properties">
-						<div class="ticket__properties-item -priority">
-							<div class="ticket__properties-label">優先度</div>
-							<div class="ticket__properties-value">
-								<div data-bind="visible:false">中</div>
-								<a class="_week-trigger-text" data-bind="text: priority, attr: {'href': '/find/PROJECT1?condition.priority=' + priorityId()}" href="/find/PROJECT1?condition.priority=3">中</a>
-							</div>
-						</div>
-						<div class="ticket__properties-item -assigner">
-							<div class="ticket__properties-label">担当者</div>
-							<div class="ticket__properties-value">
-								<a href="" title="" data-bind="attr:{ title: assignerName, href:assignerLink}" class="user-icon-set">
-									<span class="user-icon-set__user-icon">
-										<img class="image image--circle -small" data-bind="attr:{ src: assignerIcon}, visible: assignerIcon" style="display:none" src="">
-									</span>
-								</a>
-								<a class="_week-trigger-text" data-bind="attr: {'href': '/find/PROJECT1?condition.assignerId=' + assignerId()}" href="/find/PROJECT1?condition.assignerId=-1">
-									<span data-bind="text: assigner"></span>
-								</a>
-							</div>
-						</div>
-						<div class="ticket__properties-item -category">
-							<div class="ticket__properties-label">カテゴリー</div>
-							<div class="ticket__properties-value">
-								<div data-bind="visible:false">
-								</div>
-								<div data-bind="foreach: components, visible:true" style=""></div>
-							</div>
-						</div>
-						<div class="ticket__properties-item -milestones">
-							<div class="ticket__properties-label">マイルストーン</div>
-							<div class="ticket__properties-value _week-trigger-text">
-								<div data-bind="visible:false">
-								</div>
-								<div data-bind="foreach: milestones, visible:true" style=""></div>
-							</div>
-						</div>
-					</div><!-- ticket__properties 01 -->
-					<div data-bind="folding:{cookieKey:'ticket-properties', cookieSubKey:'128661'}">
-						<div class="ticket__properties-collapsed js_folding-target" style="">
-							<div class="ticket__properties" data-bind="highlight:{'global-search-keyword-highlight': $root.query}">
-								<div class="ticket__properties-item -versions">
-									<div class="ticket__properties-label">発生バージョン</div>
-									<div class="ticket__properties-value _week-trigger-text">
-										<div data-bind="visible:false">
-										</div>
-										<div data-bind="foreach: versions, visible:true" style=""></div>
-									</div>
-								</div>
-								<div class="ticket__properties-item"></div>
-								<div class="ticket__properties-item -estimated-hours">
-									<div class="ticket__properties-label">予定時間</div>
-									<div class="ticket__properties-value" data-bind="text: estimatedHours"></div>
-								</div>
-								<div class="ticket__properties-item -actual-hours">
-									<div class="ticket__properties-label">実績時間</div>
-									<div class="ticket__properties-value" data-bind="text: actualHours"></div>
-								</div>
-								<div class="ticket__properties-item -resolution">
-									<div class="ticket__properties-label">完了理由</div>
-									<div class="ticket__properties-value" data-bind="text: resolution"></div>
-								</div>
-							</div><!-- ticket__properties 02 -->
-							<div class="ticket__properties -one-col" data-bind="foreach:customFields"></div><!-- ticket__properties 03 -->
-						</div><!-- End ticketPropertiesCollapsed -->
-						<div id="toggleTicketProperties" class="see-all _mg-b-0 js_folding-handle is_opened">
-							<button type="button" class="see-all__link" aria-expanded="true">
-								<span class="icon  icon--arrow-up  -medium js_folding-icon"></span>
-								<span class="_assistive-text see-all__label-open">すべて表示する</span>
-								<span class="_assistive-text see-all__label-close">すべて折りたたむ</span>
-							</button>
-						</div>
-					</div>
-				</div><!-- End issuecard -->
-			</div><!-- End ticket -->
-			<div>
-				<!-- ko with: accessoriesViewModel -->
-				<ul role="tablist" class="tab-buttons is_not-active-all" data-bind="css: {'is_not-active-all': notActiveAllTabs}">
-					<!-- ko with: attachmentTabViewModel -->
-					<li role="presentation" class="tab-buttons__item" data-bind="visible: isActivatable" style="display:none">
-						<button type="button" id="attachfileTabButton" role="tab" aria-controls="attachfile" class="tab-buttons__link js_tabControl_tab" data-bind="click: onClick, css: {is_active: isActive}, attr: {'aria-selected': isActive() ? 'true' : 'false'}" aria-selected="false">
-							<svg role="image" class="icon -medium">
-								<use xlink:href="/images/svg/sprite.symbol.svg#icon_attach_file"></use>
-							</svg>
-							<span class="tab-buttons__label">
-								添付ファイル
-								<span class="tab-buttons__label-number" aria-hidden="true">
-									<span data-bind="text:'('+attachment().length+')'">(0)</span>
-								</span>
-							</span>
-						</button>
-					</li>
-					<!-- /ko -->
-					<!-- ko with: sharedFileTabViewModel -->
-					<li role="presentation" class="tab-buttons__item" data-bind="visible: isActivatable" style="display:none">
-						<button type="button" id="sharedfileTabButton" role="tab" aria-controls="sharedfile" class="tab-buttons__link js_tabControl_tab" data-bind="click: onClick, css: {is_active: isActive}, attr: {'aria-selected': isActive() ? 'true' : 'false'}" aria-selected="false">
-							<svg role="image" class="icon -medium">
-								<use xlink:href="/images/svg/sprite.symbol.svg#icon_files"></use>
-							</svg>
-							<span class="tab-buttons__label">
-								共有ファイル
-								<span class="tab-buttons__label-number" aria-hidden="true">
-									<span data-bind="text:'('+sharedFile().length+')'">(0)</span>
-								</span>
-							</span>
-						</button>
-					</li>
-					<!-- /ko -->
-					<!-- ko with: pullRequestTabViewModel-->
-					<li role="presentation" class="tab-buttons__item" data-bind="visible: isActivatable" style="display:none">
-						<button type="button" id="pullRequestsTabButton" role="tab" aria-controls="pullRequests" class="tab-buttons__link js_tabControl_tab" data-bind="click: onClick, css: {is_active: isActive}, attr: {'aria-selected': isActive() ? 'true' : 'false'}" aria-selected="false">
-							<svg role="image" class="icon -medium">
-								<use xlink:href="/images/svg/sprite.symbol.svg#icon_pull_request"></use>
-							</svg>
-							<span class="tab-buttons__label -icon-neary">
-								プルリクエスト<span class="tab-buttons__label-number" aria-hidden="true">
-									<span data-bind="text:'('+pullRequests().filter(function (pr){return pr.status.id == 2 || pr.status.id == 3}).length + '/' + pullRequests().length+')'">(0/0)</span>
-								</span>
-							</span>
-						</button>
-					</li>
-					<!-- /ko -->
-				</ul>
-				<!-- /ko -->
-				<div class="tab-button-content-wapper">
-					<!-- ko if: accessoriesViewModel.attachmentTabViewModel.isActivatable -->
-					<!-- /ko -->
-					<!-- ko if: accessoriesViewModel.sharedFileTabViewModel.isActivatable -->
-					<!-- /ko -->
-					<div id="pullRequests" role="tabpanel" aria-labelledby="pullRequestsTabButton" class="tab-button-content -pull-requests js_tabControl-content" data-bind="css: {is_visible: accessoriesViewModel.pullRequestTabViewModel.isActive}, attr: {'aria-hidden': !accessoriesViewModel.pullRequestTabViewModel.isActive() ? 'true' : 'false'}" aria-hidden="true">
-						<div id="pullRequestList">
-							<ul class="pull-request-summary-list" data-bind="foreach: pullRequests"></ul>
-						</div>
-					</div><!-- End pullRequests -->
-				</div><!-- End tab-button-content-wapper -->
-			</div>
-		</div>
-		<div id="commentArea">
-			<div id="comments" class="comment-section _mg-t-30" data-bind="with: commentList">
-				<div class="comment-list-heading">
-					<h3 class="title title--fourth comment-list-heading__title">
-						コメント <span class="title-group__number">(
-							<!-- ko text: numComment -->2
-							<!-- /ko -->)</span>
-					</h3>
-					<div class="comment-list-heading__view-options">
-					</div>
-				</div>
-				<div class="comment-list" data-bind="notifyRead: comments, css:{'is_not-yet-comment':numComment() == 0}">
-					<!-- ko template: { name: displayMode, foreach: comments, as: 'comment'} -->
-					<div class="comment-item is_first" data-bind="attr: {id: 'comment-' + id},
+                    <button type="button" tabindex="0" class="icon-button icon-button--default star-button" data-bind="click:addStar, css:css, event:{mouseout: blur, mouseover: calcStarListPosition}">
+                      <span class="star-button__icon__animation-sets js-star-button__icon__animation-sets">
+                        <span class="star-button__icon__animation-set js-star-button__icon__animation-set">
+                          <span class="star-button__icon"><span class="star-button__icon-inner"><span class="star-button__icon-inner-2"><svg role="image" class="icon -medium" data-bind="css: starModifier">
+                                  <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/images/svg/sprite.symbol.svg#icon_star"></use>
+                                </svg></span></span></span>
+                        </span>
+                      </span>
+                      <span class="_assistive-text">スター</span>
+                      <span class="star-button__number" data-bind="text:starCount" aria-live="polite">0</span>
+                    </button>
+                    <!-- ko if: starJsons().length -->
+                    <!-- /ko -->
+                  </span></star>
+              </div>
+            </div><!-- END ticket__article-header -->
+            <div class="ticket__description loom" id="issueDescription" data-bind="embed: description, highlight:{'global-search-keyword-highlight': $root.query}, checklist: description">
+              <div class="markdown-body">
+                <p>issue1</p>
+              </div>
+            </div>
+          </div><!-- End ticket__article -->
+          <div class="ticket__properties">
+            <div class="ticket__properties-item -priority">
+              <div class="ticket__properties-label">優先度</div>
+              <div class="ticket__properties-value">
+                <div data-bind="visible:false">{{ issue.priority.name }}</div>
+                <a class="_week-trigger-text" data-bind="text: priority, attr: {'href': '/find/PROJECT1?condition.priority=' + priorityId()}" href="/find/PROJECT1?condition.priority=3">中</a>
+              </div>
+            </div>
+            <div class="ticket__properties-item -assigner">
+              <div class="ticket__properties-label">担当者</div>
+              <div class="ticket__properties-value">
+                <a href="" title="" data-bind="attr:{ title: assignerName, href:assignerLink}" class="user-icon-set">
+                  <span class="user-icon-set__user-icon">
+                    <img class="image image--circle -small" data-bind="attr:{ src: assignerIcon}, visible: assignerIcon" style="display:none" src="">
+                  </span>{{ issue.assignee.name }}
+                </a>
+                <a class="_week-trigger-text" data-bind="attr: {'href': '/find/PROJECT1?condition.assignerId=' + assignerId()}" href="/find/PROJECT1?condition.assignerId=-1">
+                  <span data-bind="text: assigner"></span>
+                </a>
+              </div>
+            </div>
+            <div class="ticket__properties-item -category">
+              <div class="ticket__properties-label">カテゴリー</div>
+              <div class="ticket__properties-value">
+                <div data-bind="visible:false">
+                </div>
+                {% for category in issue.category %}
+                <div data-bind="foreach: components, visible:true" style="">{{ category.name }},</div>
+                {% endfor %}
+              </div>
+            </div>
+            <div class="ticket__properties-item -milestones">
+              <div class="ticket__properties-label">マイルストーン</div>
+              <div class="ticket__properties-value _week-trigger-text">
+                <div data-bind="visible:false">
+                </div>
+                {% for term in issue.milestone %}
+                <div data-bind="foreach: milestones, visible:true" style="">{{ term.name }}</div>
+                {% endfor %}
+              </div>
+            </div>
+          </div><!-- ticket__properties 01 -->
+          <div data-bind="folding:{cookieKey:'ticket-properties', cookieSubKey:'128661'}">
+            <div class="ticket__properties-collapsed js_folding-target" style="">
+              <div class="ticket__properties" data-bind="highlight:{'global-search-keyword-highlight': $root.query}">
+                <div class="ticket__properties-item -versions">
+                  <div class="ticket__properties-label">発生バージョン</div>
+                  <div class="ticket__properties-value _week-trigger-text">
+                    <div data-bind="visible:false">
+                    </div>
+                    {% for version in issue.versions %}
+                    <div data-bind="foreach: versions, visible:true" style="">{{ version.name }}</div>
+                    {% endfor %}
+                  </div>
+                </div>
+                <div class="ticket__properties-item"></div>
+                <div class="ticket__properties-item -estimated-hours">
+                  <div class="ticket__properties-label">予定時間</div>
+                  <div class="ticket__properties-value" data-bind="text: estimatedHours">{{ issue.estimatedHours }}</div>
+                </div>
+                <div class="ticket__properties-item -actual-hours">
+                  <div class="ticket__properties-label">実績時間</div>
+                  <div class="ticket__properties-value" data-bind="text: actualHours">{{ issue.actualHours }}</div>
+                </div>
+                <div class="ticket__properties-item -resolution">
+                  <div class="ticket__properties-label">完了理由</div>
+                  <div class="ticket__properties-value" data-bind="text: resolution">{{ issue.resolution.name }}</div>
+                </div>
+              </div><!-- ticket__properties 02 -->
+              <div class="ticket__properties -one-col" data-bind="foreach:customFields"></div><!-- ticket__properties 03 -->
+            </div><!-- End ticketPropertiesCollapsed -->
+          </div>
+        </div><!-- End issuecard -->
+      </div><!-- End ticket -->
+      <div>
+        <!-- ko with: accessoriesViewModel -->
+        <ul role="tablist" class="tab-buttons is_not-active-all" data-bind="css: {'is_not-active-all': notActiveAllTabs}">
+          <!-- ko with: attachmentTabViewModel -->
+          {% for attachment in issue_attachments %}
+          <li role="presentation" class="tab-buttons__item" data-bind="visible: isActivatable" style="display:none">
+            <button type="button" id="attachfileTabButton" role="tab" aria-controls="attachfile" class="tab-buttons__link js_tabControl_tab" data-bind="click: onClick, css: {is_active: isActive}, attr: {'aria-selected': isActive() ? 'true' : 'false'}" aria-selected="false">
+              <svg role="image" class="icon -medium">
+                <use xlink:href="/images/svg/sprite.symbol.svg#icon_attach_file"></use>
+              </svg>
+              <span class="tab-buttons__label">
+                添付ファイル
+                <span class="tab-buttons__label-number" aria-hidden="true">
+                  <span data-bind="text:'('+attachment().length+')'">(0)</span>
+                </span>
+              </span>
+            </button>
+          </li>
+          {% endfor %}
+          <!-- /ko -->
+          <!-- ko with: sharedFileTabViewModel -->
+          {% for file in issue_sharedfiles %}
+          <li role="presentation" class="tab-buttons__item" data-bind="visible: isActivatable" style="display:none">
+            <button type="button" id="sharedfileTabButton" role="tab" aria-controls="sharedfile" class="tab-buttons__link js_tabControl_tab" data-bind="click: onClick, css: {is_active: isActive}, attr: {'aria-selected': isActive() ? 'true' : 'false'}" aria-selected="false">
+              <svg role="image" class="icon -medium">
+                <use xlink:href="/images/svg/sprite.symbol.svg#icon_files"></use>
+              </svg>
+              <span class="tab-buttons__label">
+                共有ファイル
+                <span class="tab-buttons__label-number" aria-hidden="true">
+                  <span data-bind="text:'('+sharedFile().length+')'">{{ file.name }}</span>
+                </span>
+              </span>
+            </button>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+    <div id="commentArea">
+      <div id="comments" class="comment-section _mg-t-30" data-bind="with: commentList">
+        <div class="comment-list-heading">
+          <h3 class="title title--fourth comment-list-heading__title">
+            コメント <span class="title-group__number">(
+              <!-- ko text: numComment -->{{ comments|length }}
+              <!-- /ko -->)</span>
+          </h3>
+          <div class="comment-list-heading__view-options">
+          </div>
+        </div>
+        <div class="comment-list" data-bind="notifyRead: comments, css:{'is_not-yet-comment':numComment() == 0}">
+          <!-- ko template: { name: displayMode, foreach: comments, as: 'comment'} -->
+          {% for comment in comments %}
+          <div class="comment-item is_first" data-bind="attr: {id: 'comment-' + id},
     flush: $data.flush,
     css: {'is_collapsed': $parent.isCollapse(id), 'is_first':$parent.isFirst(id)},
     visible: $parent.commentVisible($data)" id="comment-47354086">
-						<div class="comment-item__inner">
-							<a class="page-section-anchor -double-header" data-bind="attr: {name: 'comment-' + id}" name="comment-47354086">&nbsp;</a>
-							<div class="comment-item__header">
-								<div class="user-icon-set -collapsed-trigger" data-bind="click: function(){$parent.toggleCollapse($data)}">
-									<a href="/user/okCQWN8VXt" class="user-icon-set__user-icon comment-item__user-icon" data-bind="attr: {'href': '/user/' + createdUserId, title: $parent.userTitle(createdUser) }, click: function() { return true; }, clickBubble: false" title="ANNAI_Satoさんのプロフィール">
-										<!-- ko if: createdUser && createdUser.icon && createdUser.icon !== '' -->
-										<img src="/NulabAccountIcon.action?userId=325620&amp;name=large" class="image image--circle -x-large" alt="" data-bind="attr: {src: Backlog.getUserIconUrl(icon)}">
-										<!-- /ko-->
-									</a>
-									<span class="user-icon-set__text comment-item__user-text">
-										<span class="user-icon-set__name" data-bind="text: createdUser.name">ANNAI_Sato</span><br>
-										<span class="user-icon-set__sub-line">
-											<a href="#comment-47354086" class="user-icon-set__sub-line-anchor" data-bind="attr: {'href': '#comment-' + id }, text: createdOn, click: function(){$root.scrollToComment(id);}, clickBubble: false">2020/10/26 21:35:32</a>
-											<span class="comment-item__collapsed-summary-separator">/</span>
-											<span class="comment-item__collapsed-summary" data-bind="collapseSummary: $data">comment1</span>
-										</span>
-									</span>
-								</div>
-							</div><!-- End .comment-item__header -->
-							<div class="comment-item__container js_comment-container">
-								<ul class="comment-changelog" data-bind="foreach: changelog"></ul>
-								<div class="loom comment-content" data-bind="embed: content, highlight: {'global-search-keyword-highlight': $root.query, 'star-comment-highlight': highlightWords}, visible: !$parent.isEdit(id)">
-									<div>
-										<div class="markdown-body">
-											<p>comment1</p>
-										</div>
-									</div>
-								</div>
-							</div><!-- End .comment-item__container -->
-						</div><!-- comment-item__inner -->
-					</div><!-- comment-item -->
-					<div class="comment-item" data-bind="attr: {id: 'comment-' + id},
-    flush: $data.flush,
-    css: {'is_collapsed': $parent.isCollapse(id), 'is_first':$parent.isFirst(id)},
-    visible: $parent.commentVisible($data)" id="comment-47354095">
-						<div class="comment-item__inner">
-							<a class="page-section-anchor -double-header" data-bind="attr: {name: 'comment-' + id}" name="comment-47354095">&nbsp;</a>
-							<div class="comment-item__header">
-								<div class="user-icon-set -collapsed-trigger" data-bind="click: function(){$parent.toggleCollapse($data)}">
-									<a href="/user/okCQWN8VXt" class="user-icon-set__user-icon comment-item__user-icon" data-bind="attr: {'href': '/user/' + createdUserId, title: $parent.userTitle(createdUser) }, click: function() { return true; }, clickBubble: false" title="ANNAI_Satoさんのプロフィール">
-										<!-- ko if: createdUser && createdUser.icon && createdUser.icon !== '' -->
-										<img src="/NulabAccountIcon.action?userId=325620&amp;name=large" class="image image--circle -x-large" alt="" data-bind="attr: {src: Backlog.getUserIconUrl(icon)}">
-										<!-- /ko-->
-									</a>
-									<span class="user-icon-set__text comment-item__user-text">
-										<span class="user-icon-set__name" data-bind="text: createdUser.name">ANNAI_Sato</span><br>
-										<span class="user-icon-set__sub-line">
-											<a href="#comment-47354095" class="user-icon-set__sub-line-anchor" data-bind="attr: {'href': '#comment-' + id }, text: createdOn, click: function(){$root.scrollToComment(id);}, clickBubble: false">2020/10/26 21:35:39</a>
-											<span class="comment-item__collapsed-summary-separator">/</span>
-											<span class="comment-item__collapsed-summary" data-bind="collapseSummary: $data">comment2</span>
-										</span>
-									</span>
-								</div>
-							</div><!-- End .comment-item__header -->
-							<div class="comment-item__container js_comment-container">
-								<ul class="comment-changelog" data-bind="foreach: changelog"></ul>
-								<div class="loom comment-content" data-bind="embed: content, highlight: {'global-search-keyword-highlight': $root.query, 'star-comment-highlight': highlightWords}, visible: !$parent.isEdit(id)">
-									<div>
-										<div class="markdown-body">
-											<p>comment2</p>
-										</div>
-									</div>
-								</div>
-							</div><!-- End .comment-item__container -->
-						</div><!-- comment-item__inner -->
-					</div><!-- comment-item -->
-				</div><!-- End content-main -->
-			</div><!-- End content-outer -->
-		</div>
-	</div>
+            <div class="comment-item__inner">
+              <a class="page-section-anchor -double-header" data-bind="attr: {name: 'comment-' + id}" name="comment-47354086">&nbsp;</a>
+              <div class="comment-item__header">
+                <div class="user-icon-set -collapsed-trigger" data-bind="click: function(){$parent.toggleCollapse($data)}">
+                  <a href="/user/okCQWN8VXt" class="user-icon-set__user-icon comment-item__user-icon" data-bind="attr: {'href': '/user/' + createdUserId, title: $parent.userTitle(createdUser) }, click: function() { return true; }, clickBubble: false" title="ANNAI_Satoさんのプロフィール">
+                    <!-- ko if: createdUser && createdUser.icon && createdUser.icon !== '' -->
+                    <img src="/NulabAccountIcon.action?userId=325620&amp;name=large" class="image image--circle -x-large" alt="" data-bind="attr: {src: Backlog.getUserIconUrl(icon)}">
+                    <!-- /ko-->
+                  </a>
+                  <span class="user-icon-set__text comment-item__user-text">
+                    <span class="user-icon-set__name" data-bind="text: createdUser.name">{{ comment.createdUser.name }}</span><br>
+                    <span class="user-icon-set__sub-line">
+                      <a href="#comment-47354086" class="user-icon-set__sub-line-anchor" data-bind="attr: {'href': '#comment-' + id }, text: createdOn, click: function(){$root.scrollToComment(id);}, clickBubble: false">{{ comment.created }}</a>
+                      <span class="comment-item__collapsed-summary-separator">/</span>
+                      <span class="comment-item__collapsed-summary" data-bind="collapseSummary: $data">{{ comment.summary }}</span>
+                    </span>
+                  </span>
+                </div>
+              </div><!-- End .comment-item__header -->
+              <div class="comment-item__container js_comment-container">
+                <ul class="comment-changelog" data-bind="foreach: changelog">
+                  {% for log in comment.changelog %}
+                  <li class="comment-changelog__item" data-bind="css: {commit: commit}">
+                    <span class="comment-changelog__label" data-bind="text: field">{{ log.field }}</span>:
+                    <span data-bind="text: originalValue">{{ log.originalValue }}</span>
+                    <span class="comment-changelog__arrow"></span>
+                    <span data-bind="text: newValue">{{ log.newValue }}</span>
+                  </li>
+                  {% endfor %}
+                </ul>
+                <div class="loom comment-content" data-bind="embed: content, highlight: {'global-search-keyword-highlight': $root.query, 'star-comment-highlight': highlightWords}, visible: !$parent.isEdit(id)">
+                  <div>
+                    <div class="markdown-body">
+                      {{ comment.content|markdown }}
+                    </div>
+                  </div>
+                </div>
+              </div><!-- End .comment-item__container -->
+            </div><!-- comment-item__inner -->
+          </div><!-- comment-item -->
+          {% endfor %}
+        </div><!-- End content-main -->
+      </div><!-- End content-outer -->
+    </div>
+  </div>
 </body>
+
 </html>

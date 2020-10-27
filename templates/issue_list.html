@@ -2,99 +2,120 @@
 <html lang="ja" class="">
 
 <head>
-	<meta charset="UTF-8">
-	<meta http-equiv="x-ua-compatible" content="ie=edge">
-	<meta name="viewport" content="width=1080">
-	<meta name="referrer" content="no-referrer">
-	<link rel="stylesheet" type="text/css" media="all" href="../css/tooltipster.bundle.min.css">
-	<link rel="stylesheet" type="text/css" media="all" href="../css/Issue.css">
-	<link rel="stylesheet" type="text/css" media="all" href="../css/introjs.css">
-	<link rel="stylesheet" type="text/css" media="all" href="../css/introjs-flattener.css">
-	<title>[PROJECT1] 課題の一覧</title>
+  <meta charset="UTF-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=1080">
+  <meta name="referrer" content="no-referrer">
+  <link rel="stylesheet" type="text/css" media="all" href="../css/tooltipster.bundle.min.css">
+  <link rel="stylesheet" type="text/css" media="all" href="../css/Issue.css">
+  <link rel="stylesheet" type="text/css" media="all" href="../css/introjs.css">
+  <link rel="stylesheet" type="text/css" media="all" href="../css/introjs-flattener.css">
+  <title>{{ project.key }} 課題の一覧</title>
 </head>
 
-
-<header id="project-header" class="content-header" aria-label="プロジェクトヘッダー">
-	<div class="content-header__inner project-header">
-		<div class="header-icon-set project-header__summary">
-			<div class="header-icon-set__icon"><a href="/projects/PROJECT1">
-
-					<img src="/SpaceImage.action" alt="project logo" class="header-icon-set__image">
-
-
-				</a></div>
-			<h1 class="header-icon-set__text"><span class="header-icon-set__name">project1</span><span class="header-icon-set__key">(PROJECT1)</span></h1>
-		</div>
-
-		<div class="project-header__actions">
-		</div><!-- End project-header__actions -->
-	</div><!-- End content-header__inner -->
-</header><!-- End content-header -->
-
 <body>
-	<div class="result-set" id="resultBody" aria-live="polite" aria-atomic="true">
-		<h2 class="_assistive-text">課題一覧</h2>
-		<div class="result-set__main js_hover-copy-target js_hover-open-issue-target">
-			<table id="issues-table" data-bind="table: issueTable" class="data-table data-table--default -clickable find-issue-table">
-				<thead>
-					<tr>
-						<th data-column-name="issueType" tabindex="0" class="sort">種別</th>
-						<th data-column-name="issueKey" tabindex="0" class="sort">キー</th>
-						<th data-column-name="summary" tabindex="0" class="sort">件名</th>
-						<th data-column-name="assignee" tabindex="0" class="sort">担当者</th>
-						<th data-column-name="status" tabindex="0" class="sort">状態</th>
-						<th data-column-name="category" tabindex="0" class="sort">カテゴリー</th>
-						<th data-column-name="priority" tabindex="0" class="sort">優先度</th>
-						<th data-column-name="version" tabindex="0" class="sort">発生バージョン</th>
-						<th data-column-name="milestone" tabindex="0" class="sort">マイルストーン</th>
-						<th data-column-name="created" tabindex="0" class="sort">登録日</th>
-						<th data-column-name="startDate" tabindex="0" class="sort">開始日</th>
-						<th data-column-name="dueDate" tabindex="0" class="sort">期限日</th>
-						<th data-column-name="estimatedHours" tabindex="0" class="sort">予定時間
-						</th>
-						<th data-column-name="actualHours" tabindex="0" class="sort">実績時間
-						</th>
-						<th data-column-name="updated" tabindex="0" class="is_sort-down sort">更新日
-						</th>
-						<th data-column-name="createdUser" tabindex="0" class="sort">登録者</th>
-						<th data-column-name="attachments" tabindex="0" class="sort">添付</th>
-						<th data-column-name="sharedFiles" tabindex="0" class="sort">共有</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr data-row-index="0" class="even js-no-child">
-						<td data-column-name="issueType" class="cell-issue-type"><span class="pill pill--issue-type-7 -small">タスク</span></td>
-						<td data-column-name="issueKey" class="cell-key js-issue-key"><a href="/PreViewIssue.action?key=PROJECT1-1&amp;projectId=128661&amp;statusId=1&amp;statusId=2&amp;statusId=3&amp;sort=UPDATED&amp;order=false&amp;simpleSearch=true&amp;allOver=false&amp;offset=0&amp;limit=20&amp;offset=0&amp;condition.currentOffset=0">PROJECT1-1</a>
-						</td>
-						<td data-column-name="summary" class="cell-summary js-issue-title">PROJECT1-1 issue1</td>
-						<td data-column-name="assignee" class="cell-user"></td>
-						<td data-column-name="status" class="cell-status">
-							<div class="simptip-position-top simptip-movable simptip-smooth" data-tooltip="未対応"><span class="status status--1 -small">未対応</span></div>
-						</td>
-						<td data-column-name="category" class="cell-category"></td>
-						<td data-column-name="priority" class="cell-priority"><span class="simptip-position-top simptip-movable simptip-smooth" data-tooltip="中"><svg role="image" class="icon -medium -priority-3">
-									<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/images/svg/sprite.symbol.svg#icon_priority_3"></use>
-								</svg></span></td>
-						<td data-column-name="version" class="cell-version"></td>
-						<td data-column-name="milestone" class="cell-milestone"></td>
-						<td data-column-name="created" class="cell-created">2020/10/24</td>
-						<td data-column-name="startDate" class="cell-start-date"></td>
-						<td data-column-name="dueDate" class="cell-limit-date"></td>
-						<td data-column-name="estimatedHours" class="cell-estimated-hours"></td>
-						<td data-column-name="actualHours" class="cell-actual-hours"></td>
-						<td data-column-name="updated" class="cell-updated">2020/10/26</td>
-						<td data-column-name="createdUser" class="cell-user">
-							<div class="user-icon-set">
-								<span class="user-icon-set__user-icon"><img class="image image--circle -small" src="/NulabAccountIcon.action?userId=325620&amp;name=large" alt=""></span>
-								<span class="user-icon-set__text">ANNAI_Sato</span>
-							</div>
-						</td>
-						<td data-column-name="attachments" class="cell-file"></td>
-						<td data-column-name="sharedFiles" class="cell-file"></td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
-	</div>
+  <header id="project-header" class="content-header" aria-label="プロジェクトヘッダー">
+    <div class="content-header__inner project-header">
+      <div class="header-icon-set project-header__summary">
+        <div class="header-icon-set__icon"><a href="/projects/PROJECT1">
+
+            <img src="/SpaceImage.action" alt="project logo" class="header-icon-set__image">
+
+
+          </a></div>
+        <h1 class="header-icon-set__text"><span class="header-icon-set__name">{{ project.name }}</span><span class="header-icon-set__key">{{ project.key }}</span></h1>
+      </div>
+
+      <div class="project-header__actions">
+      </div><!-- End project-header__actions -->
+    </div><!-- End content-header__inner -->
+  </header><!-- End content-header -->
+  <div class="content-outer">
+    <div class="result-set" id="resultBody" aria-live="polite" aria-atomic="true">
+      <h2 class="_assistive-text">課題一覧</h2>
+      <div class="result-set__main js_hover-copy-target js_hover-open-issue-target">
+        <table id="issues-table" data-bind="table: issueTable" class="data-table data-table--default -clickable find-issue-table">
+          <thead>
+            <tr>
+              <th data-column-name="issueType" tabindex="0" class="sort">種別</th>
+              <th data-column-name="issueKey" tabindex="0" class="sort">キー</th>
+              <th data-column-name="summary" tabindex="0" class="sort">件名</th>
+              <th data-column-name="assignee" tabindex="0" class="sort">担当者</th>
+              <th data-column-name="status" tabindex="0" class="sort">状態</th>
+              <th data-column-name="category" tabindex="0" class="sort">カテゴリー</th>
+              <th data-column-name="priority" tabindex="0" class="sort">優先度</th>
+              <th data-column-name="version" tabindex="0" class="sort">発生バージョン</th>
+              <th data-column-name="milestone" tabindex="0" class="sort">マイルストーン</th>
+              <th data-column-name="created" tabindex="0" class="sort">登録日</th>
+              <th data-column-name="startDate" tabindex="0" class="sort">開始日</th>
+              <th data-column-name="dueDate" tabindex="0" class="sort">期限日</th>
+              <th data-column-name="estimatedHours" tabindex="0" class="sort">予定時間
+              </th>
+              <th data-column-name="actualHours" tabindex="0" class="sort">実績時間
+              </th>
+              <th data-column-name="updated" tabindex="0" class="is_sort-down sort">更新日
+              </th>
+              <th data-column-name="createdUser" tabindex="0" class="sort">登録者</th>
+              <th data-column-name="attachments" tabindex="0" class="sort">添付</th>
+              <th data-column-name="sharedFiles" tabindex="0" class="sort">共有</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr data-row-index="0" class="even js-no-child">
+              <td data-column-name="issueType" class="cell-issue-type"><span class="pill pill--issue-type-7 -small">{{ issue.issueType.name }}</span></td>
+              <td data-column-name="issueKey" class="cell-key js-issue-key"><a href="/PreViewIssue.action?key=PROJECT1-1&amp;projectId=128661&amp;statusId=1&amp;statusId=2&amp;statusId=3&amp;sort=UPDATED&amp;order=false&amp;simpleSearch=true&amp;allOver=false&amp;offset=0&amp;limit=20&amp;offset=0&amp;condition.currentOffset=0">{{ issue.issueKey }}</a>
+              </td>
+              <td data-column-name="summary" class="cell-summary js-issue-title">{{ issue.issueKey }} {{ issue.summary }}</td>
+              <td data-column-name="assignee" class="cell-user">{{ issue.assignee.name }}</td>
+              <td data-column-name="status" class="cell-status">
+                <div class="simptip-position-top simptip-movable simptip-smooth" data-tooltip="{{ issue.status.name }}"><span class="status status--1 -small">{{ issue.status.name }}</span></div>
+              </td>
+              <td data-column-name="category" class="cell-category">
+                {% for category in issue.category %}
+                {{ category.name }},
+                {% endfor %}
+              </td>
+              <td data-column-name="priority" class="cell-priority"><span class="simptip-position-top simptip-movable simptip-smooth" data-tooltip="{{ issue.priority.name }}"><svg role="image" class="icon -medium -priority-3">
+                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/images/svg/sprite.symbol.svg#icon_priority_3"></use>
+                  </svg></span></td>
+              <td data-column-name="version" class="cell-version">
+                {% for version in issue.versions %}
+                {{ version.name }}
+                {% endfor %}
+              </td>
+              <td data-column-name="milestone" class="cell-milestone">
+                {% for term in issue.milestone %}
+                {{ term.name }}
+                {% endfor %}
+              </td>
+              <td data-column-name="created" class="cell-created">{{ issue.created }}</td>
+              <td data-column-name="startDate" class="cell-start-date">{{ issue.startDate }}</td>
+              <td data-column-name="dueDate" class="cell-limit-date">{{ issue.dueDate }}</td>
+              <td data-column-name="estimatedHours" class="cell-estimated-hours">{{ issue.estimatedHours }}</td>
+              <td data-column-name="actualHours" class="cell-actual-hours">{{ issue.actualHours }}</td>
+              <td data-column-name="updated" class="cell-updated">{{ issue.updated }}</td>
+              <td data-column-name="createdUser" class="cell-user">
+                <div class="user-icon-set">
+                  <span class="user-icon-set__user-icon"><img class="image image--circle -small" src="/NulabAccountIcon.action?userId=325620&amp;name=large" alt=""></span>
+                  <span class="user-icon-set__text">{{ issue.createdUser.name }}</span>
+                </div>
+              </td>
+              <td data-column-name="attachments" class="cell-file">
+                {% for attachment in issue.attachments %}
+                <a href="./attachment/{{ attachment.id }}">{{ attachment.name }}</a>
+                {% endfor %}
+              </td>
+              <td data-column-name="sharedFiles" class="cell-file">
+                {% for file in issue.sharedFiles %}
+                <a href="./file/{{ file.id }}">{{ file.name }}</a>
+                {% endfor %}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
 </body>
+
 </html>
