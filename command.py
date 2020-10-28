@@ -82,6 +82,9 @@ class Command:
                 data_file = open(f'{self.args.dir}{self.args.command}_{index}.json', 'w')
                 json.dump(data, data_file, ensure_ascii=False, indent=2)
 
+    def _convert_res_to_dict(self, response):
+        return json.loads(response.content.decode('utf-8'))
+
     def get_users(self):
         return user_api.get_user_list()
 
