@@ -80,6 +80,7 @@ class Command:
             }
             parse.create_html_file('issue_list.html', 'issue_list.html', data)
             for issue in issues:
+                data["issue"] = issue
                 parse.create_html_file('issue_detail.html', f"issue_{issue['id']}.html", data)
 
     def _create_output_file(self, data):
