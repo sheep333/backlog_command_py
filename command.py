@@ -95,40 +95,37 @@ class Command:
         return json.loads(response.content.decode('utf-8'))
 
     def get_users(self):
-        return user_api.get_user_list()
+        response = user_api.get_user_list()
+        return self._convert_res_to_dict(response)
 
     def get_issues(self):
-        return issue_api.get_issue_list()
+        response = issue_api.get_issue_list()
+        return self._convert_res_to_dict(response)
 
     def get_projects(self):
-        return project_api.get_project_list()
+        response = project_api.get_project_list()
+        return self._convert_res_to_dict(response)
 
     def get_project_issues(self):
-        return issue_api.get_issue_list(project_id=self.args.project)
+        response = issue_api.get_issue_list(project_id=self.args.project)
+        return self._convert_res_to_dict(response)
 
     def get_project_users(self):
-        return project_api.get_project_user_list(project_id_or_key=self.args.project)
+        response = project_api.get_project_user_list(project_id_or_key=self.args.project)
+        return self._convert_res_to_dict(response)
 
     def get_issue_comments(self):
-        return issue_comment_api.get_comment_list(issue_id_or_key=8810734)
+        response = issue_comment_api.get_comment_list(issue_id_or_key=8810734)
+        return self._convert_res_to_dict(response)
 
     def get_wiki_page_list(self):
-        return wiki_api.get_wiki_page_list(project_id_or_key=self.args.project)
+        response = wiki_api.get_wiki_page_list(project_id_or_key=self.args.project)
+        return self._convert_res_to_dict(response)
 
     def get_project_data(self):
-        """
-        TODO:
-        他のモジュールと違ってresponseオブジェクトを返すわけではないので名前がよくない
-        他のメソッドもdict型を返却するほうがいいかも...
-        最終的にはこのメソッドしかいらないので、あとで考える
-        """
-        issues_res = self.get_project_issues()
-        wikis_res = self.get_wiki_page_list()
-        users_res = self.get_project_users()
-
-        issues = self._convert_res_to_dict(issues_res)
-        wikis = self._convert_res_to_dict(wikis_res)
-        users = self._convert_res_to_dict(users_res)
+        issues = self.get_project_issues()
+        wikis = self.get_wiki_page_list()
+        users = self.get_project_users()
 
         comments = []
         for issue in issues:
