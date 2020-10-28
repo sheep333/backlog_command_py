@@ -1,13 +1,14 @@
-from jinja2 import Template
+from jinja2 import Environment, FileSystemLoader
 
 
 class Parse:
 
-    def to_html(self, template_name, file_name, output_path, data):
+    def create_html_file(self, template_name, file_name, data, output_path="./output/html/"):
         """
-        dict型のデータを
+        Jinja2のテンプレートエンジンを使って、HTMLファイルを作成する
         """
-        template = Template(eval(f'{template_name}.html'))
+        env = Environment(loader=FileSystemLoader('./templates/'))
+        template = env.get_template(template_name)
         output_html = template.render(data)
         html_file = open("{output_path}/{file_name}", "w", encoding="utf-8")
         html_file.write(output_html)

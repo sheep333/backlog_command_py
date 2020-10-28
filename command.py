@@ -2,7 +2,7 @@ import argparse
 import json
 import os
 import pandas as pd
-from jinja2 import Template, Environment, FileSystemLoader
+from parse import Parse
 
 from pybacklogpy.BacklogConfigure import BacklogComConfigure
 from pybacklogpy.SharedFile import SharedFile
@@ -69,18 +69,18 @@ class Command:
             data = self._convert_res_to_dict(response)
             self._create_output_file(data)
         else:
-            env = Environment(loader=FileSystemLoader('./templates/'))
-            issues, wikis, users, comments = self.get_project_data()
-            issue_list_template = env.get_template('issue_list.html')
-            issue_detail_template = env.get_template('issue_detail.html')
-            print(issue_list_template.render(issues))
+            project, issues, wikis, users, comments = self.get_project_data()
+            parse = Parse()
+
             data = {
+                "project": project,
                 "issues": issues,
                 "wikis": wikis,
                 "comments": comments
             }
+            parse.create_html_file('issue_list.html', 'issue_list.html', data)
             for issue in issues:
-                print(issue_detail_template.render(issue))
+                parse.create_html_file('issue_detail.html', f"issue_{issue['id']}.html", data)
 
     def _create_output_file(self, data):
         if self.args.output == "csv":
