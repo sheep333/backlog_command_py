@@ -2,10 +2,11 @@ import argparse
 import json
 import os
 import pandas as pd
+from jinja2 import Template, Environment, FileSystemLoader
 
 from pybacklogpy.BacklogConfigure import BacklogComConfigure
 from pybacklogpy.SharedFile import SharedFile
-from pybacklogpy.Issue import Issue, IssueAttachment, IssueComment, IssueSharedFile
+from pybacklogpy.Issue import Issue, IssueAttachment, IssueComment
 from pybacklogpy.Project import Project
 from pybacklogpy.User import User
 from pybacklogpy.Wiki import Wiki, WikiAttachment, WikiSharedFile
@@ -65,13 +66,21 @@ class Command:
     def exec(self):
         if self.args.command != 'get_project_data':
             response = eval(f'self.{self.args.command}')()
-            data = json.loads(response.content.decode('utf-8'))
+            data = self._convert_res_to_dict(response)
             self._create_output_file(data)
         else:
-            for response in self.get_project_data():
-                data = json.loads(response.content.decode('utf-8'))
-                self._create_output_file(data)
-            # TODO: それぞれを結び付けてJSONにするかdictにしてテンプレートを作成するか何かする
+            env = Environment(loader=FileSystemLoader('./templates/'))
+            issues, wikis, users, comments = self.get_project_data()
+            issue_list_template = env.get_template('issue_list.html')
+            issue_detail_template = env.get_template('issue_detail.html')
+            print(issue_list_template.render(issues))
+            data = {
+                "issues": issues,
+                "wikis": wikis,
+                "comments": comments
+            }
+            for issue in issues:
+                print(issue_detail_template.render(issue))
 
     def _create_output_file(self, data):
         if self.args.output == "csv":
@@ -113,13 +122,13 @@ class Command:
         他のメソッドもdict型を返却するほうがいいかも...
         最終的にはこのメソッドしかいらないので、あとで考える
         """
-        issues_res = issue_api.get_issue_list(project_id=self.args.project)
-        wikis_res = wiki_api.get_wiki_page_list(project_id_or_key=self.args.project)
-        users_res = project_api.get_project_user_list(project_id_or_key=self.args.project)
+        issues_res = self.get_project_issues()
+        wikis_res = self.get_wiki_page_list()
+        users_res = self.get_project_users()
 
-        issues = json.loads(issues_res.content.decode('utf-8'))
-        wikis = json.loads(wikis_res.content.decode('utf-8'))
-        users = json.loads(users_res.content.decode('utf-8'))
+        issues = self._convert_res_to_dict(issues_res)
+        wikis = self._convert_res_to_dict(wikis_res)
+        users = self._convert_res_to_dict(users_res)
 
         comments = []
         for issue in issues:
@@ -127,11 +136,14 @@ class Command:
                 issue_attachment_api.get_issue_attachment(issue_id_or_key=issue['id'], attachment_id=attachment['id'])
             for shared_file in issue['sharedFiles']:
                 sharedfile_api.get_file(project_id_or_key=self.args.project, shared_file_id=shared_file['id'])
-            comment_res = issue_comment_api.get_comment_list(issue_id_or_key=issue['id'])
-            comments.append(json.loads(comment_res.content.decode('utf-8')))
+            comments_res = issue_comment_api.get_comment_list(issue_id_or_key=issue['id'])
+            for comment_res in comments_res:
+                comments.append(self._convert_res_to_dict(comment_res))
 
         for wiki in wikis:
-            wiki_attachment_api.get_list_of_wiki_attachments(wiki_id=wiki['id'])
-            wiki_sharedfile_api.get_list_of_shared_files_on_wiki(wiki_id=wiki['id'])
+            for attachment in wiki['attachments']:
+                wiki_attachment_api.get_wiki_page_attachment(wiki_id=wiki['id'])
+            for shared_file in wiki['sharedFiles']:
+                sharedfile_api.get_file(project_id_or_key=self.args.project, shared_file_id=shared_file['id'])
 
         return issues, wikis, users, comments
