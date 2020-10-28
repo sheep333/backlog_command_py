@@ -149,6 +149,7 @@ class Command:
             comments_res = issue_comment_api.get_comment_list(issue_id_or_key=issue['id'])
             for comment_res in comments_res:
                 comments.append(self._convert_res_to_dict(comment_res))
+            comments.extend(self.get_issue_comments(issue["id"]))
 
         for wiki in wikis:
             for attachment in wiki['attachments']:
