@@ -41,7 +41,6 @@ class Command:
                 'get_projects',
                 'get_project_issues',
                 'get_project_users',
-                'get_issue_comments',
                 'get_wiki_page_list',
                 'get_project_data'
             ]
@@ -98,11 +97,13 @@ class Command:
 
     def get_users(self):
         response = user_api.get_user_list()
-        return self._convert_res_to_dict(response)
+        users = [self._convert_res_to_dict(user) for user in response.content]
+        return users
 
     def get_issues(self):
         response = issue_api.get_issue_list()
-        return self._convert_res_to_dict(response)
+        issues = [self._convert_res_to_dict(issue) for issue in response.content]
+        return issues
 
     def get_project(self):
         response = project_api.get_project(project_id_or_key=self.args.project)
@@ -110,23 +111,28 @@ class Command:
 
     def get_projects(self):
         response = project_api.get_project_list()
-        return self._convert_res_to_dict(response)
+        projects = [self._convert_res_to_dict(project) for project in response.content]
+        return projects
 
     def get_project_issues(self):
         response = issue_api.get_issue_list(project_id=self.args.project)
-        return self._convert_res_to_dict(response)
+        project_issues = [self._convert_res_to_dict(issue) for issue in response.content]
+        return project_issues
 
     def get_project_users(self):
         response = project_api.get_project_user_list(project_id_or_key=self.args.project)
-        return self._convert_res_to_dict(response)
+        project_users = [self._convert_res_to_dict(user) for user in response.content]
+        return project_users
 
-    def get_issue_comments(self):
-        response = issue_comment_api.get_comment_list(issue_id_or_key=8810734)
-        return self._convert_res_to_dict(response)
+    def get_issue_comments(self, issue_id):
+        response = issue_comment_api.get_comment_list(issue_id_or_key=issue_id)
+        comments = [self._convert_res_to_dict(comment) for comment in response]
+        return comments
 
     def get_wiki_page_list(self):
         response = wiki_api.get_wiki_page_list(project_id_or_key=self.args.project)
-        return self._convert_res_to_dict(response)
+        wikis = [self._convert_res_to_dict(wiki) for wiki in response.content]
+        return wikis
 
     def get_project_data(self):
         project = self.get_project()

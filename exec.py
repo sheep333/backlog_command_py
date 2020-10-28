@@ -12,7 +12,6 @@ def main():
         get_projects
         get_project_issues
         get_project_users
-        get_issue_comments
         get_wiki_page_list
 
     アウトプットの形式
