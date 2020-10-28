@@ -1,6 +1,7 @@
 import argparse
 import json
 import os
+from logging import Logger
 
 import pandas as pd
 from pybacklogpy.BacklogConfigure import BacklogComConfigure
@@ -14,6 +15,8 @@ from parse import Parse
 
 SPACE_KEY = str(os.getenv('SPACE_KEY'))
 API_KEY = os.getenv('API_KEY')
+
+logger = Logger.log(__name__)
 
 config = BacklogComConfigure(space_key=SPACE_KEY, api_key=API_KEY)
 # TODO: パッチを当てたので、引数にoutput用のディレクトリを追加
@@ -143,19 +146,19 @@ class Command:
         comments = []
         for issue in issues:
             for attachment in issue['attachments']:
-                issue_attachment_api.get_issue_attachment(issue_id_or_key=issue['id'], attachment_id=attachment['id'])
+                path = issue_attachment_api.get_issue_attachment(issue_id_or_key=issue['id'], attachment_id=attachment['id'])
+                logger.info(f"Saved issue attachment: {path}")
             for shared_file in issue['sharedFiles']:
-                sharedfile_api.get_file(project_id_or_key=self.args.project, shared_file_id=shared_file['id'])
-            comments_res = issue_comment_api.get_comment_list(issue_id_or_key=issue['id'])
-            for comment_res in comments_res:
-                comments.append(self._convert_res_to_dict(comment_res))
+                path = sharedfile_api.get_file(project_id_or_key=self.args.project, shared_file_id=shared_file['id'])
+                logger.info(f"Saved issue sharefile: {path}")
             comments.extend(self.get_issue_comments(issue["id"]))
 
         for wiki in wikis:
             for attachment in wiki['attachments']:
                 path = wiki_attachment_api.get_wiki_page_attachment(wiki_id=wiki['id'])
-                print(path)
+                logger.info(f"Saved wiki attachment: {path}")
             for shared_file in wiki['sharedFiles']:
-                sharedfile_api.get_file(project_id_or_key=self.args.project, shared_file_id=shared_file['id'])
+                path = sharedfile_api.get_file(project_id_or_key=self.args.project, shared_file_id=shared_file['id'])
+                logger.info(f"Saved wiki sharefile: {path}")
 
         return project, issues, wikis, users, comments
