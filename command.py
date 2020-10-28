@@ -1,15 +1,16 @@
 import argparse
 import json
 import os
-import pandas as pd
-from parse import Parse
 
+import pandas as pd
 from pybacklogpy.BacklogConfigure import BacklogComConfigure
-from pybacklogpy.SharedFile import SharedFile
 from pybacklogpy.Issue import Issue, IssueAttachment, IssueComment
 from pybacklogpy.Project import Project
+from pybacklogpy.SharedFile import SharedFile
 from pybacklogpy.User import User
 from pybacklogpy.Wiki import Wiki, WikiAttachment, WikiSharedFile
+
+from parse import Parse
 
 SPACE_KEY = str(os.getenv('SPACE_KEY'))
 API_KEY = os.getenv('API_KEY')
@@ -145,7 +146,8 @@ class Command:
 
         for wiki in wikis:
             for attachment in wiki['attachments']:
-                wiki_attachment_api.get_wiki_page_attachment(wiki_id=wiki['id'])
+                path = wiki_attachment_api.get_wiki_page_attachment(wiki_id=wiki['id'])
+                print(path)
             for shared_file in wiki['sharedFiles']:
                 sharedfile_api.get_file(project_id_or_key=self.args.project, shared_file_id=shared_file['id'])
 

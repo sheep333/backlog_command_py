@@ -1,8 +1,9 @@
 import re
-import requests
 
+import requests
+from pybacklogpy.Issue import (Issue, IssueAttachment, IssueComment,
+                               IssueSharedFile)
 from pybacklogpy.modules import RequestSender
-from pybacklogpy.Issue import Issue, IssueAttachment, IssueComment, IssueSharedFile
 from pybacklogpy.Project import Project
 from pybacklogpy.User import User
 from pybacklogpy.Wiki import Wiki, WikiAttachment, WikiSharedFile
