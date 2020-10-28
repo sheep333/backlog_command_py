@@ -102,6 +102,10 @@ class Command:
         response = issue_api.get_issue_list()
         return self._convert_res_to_dict(response)
 
+    def get_project(self):
+        response = project_api.get_project(project_id_or_key=self.args.project)
+        return self._convert_res_to_dict(response)
+
     def get_projects(self):
         response = project_api.get_project_list()
         return self._convert_res_to_dict(response)
@@ -123,6 +127,7 @@ class Command:
         return self._convert_res_to_dict(response)
 
     def get_project_data(self):
+        project = self.get_project()
         issues = self.get_project_issues()
         wikis = self.get_wiki_page_list()
         users = self.get_project_users()
@@ -143,4 +148,4 @@ class Command:
             for shared_file in wiki['sharedFiles']:
                 sharedfile_api.get_file(project_id_or_key=self.args.project, shared_file_id=shared_file['id'])
 
-        return issues, wikis, users, comments
+        return project, issues, wikis, users, comments
