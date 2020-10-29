@@ -1,7 +1,7 @@
 import argparse
 import json
 import os
-from logging import Logger
+import logging
 
 import pandas as pd
 from pybacklogpy.BacklogConfigure import BacklogComConfigure
@@ -16,7 +16,7 @@ from parse import Parse
 SPACE_KEY = str(os.getenv('SPACE_KEY'))
 API_KEY = os.getenv('API_KEY')
 
-logger = Logger.log(__name__)
+logger = logging.getLogger(__name__)
 
 config = BacklogComConfigure(space_key=SPACE_KEY, api_key=API_KEY)
 # TODO: パッチを当てたので、引数にoutput用のディレクトリを追加
@@ -100,12 +100,12 @@ class Command:
 
     def get_users(self):
         response = user_api.get_user_list()
-        users = [self._convert_res_to_dict(user) for user in response.content]
+        users = self._convert_res_to_dict(response)
         return users
 
     def get_issues(self):
         response = issue_api.get_issue_list()
-        issues = [self._convert_res_to_dict(issue) for issue in response.content]
+        issues = self._convert_res_to_dict(response)
         return issues
 
     def get_project(self):
@@ -114,27 +114,27 @@ class Command:
 
     def get_projects(self):
         response = project_api.get_project_list()
-        projects = [self._convert_res_to_dict(project) for project in response.content]
+        projects = self._convert_res_to_dict(response)
         return projects
 
     def get_project_issues(self):
         response = issue_api.get_issue_list(project_id=self.args.project)
-        project_issues = [self._convert_res_to_dict(issue) for issue in response.content]
+        project_issues = self._convert_res_to_dict(response)
         return project_issues
 
     def get_project_users(self):
         response = project_api.get_project_user_list(project_id_or_key=self.args.project)
-        project_users = [self._convert_res_to_dict(user) for user in response.content]
+        project_users = self._convert_res_to_dict(response)
         return project_users
 
     def get_issue_comments(self, issue_id):
         response = issue_comment_api.get_comment_list(issue_id_or_key=issue_id)
-        comments = [self._convert_res_to_dict(comment) for comment in response]
+        comments = self._convert_res_to_dict(response)
         return comments
 
     def get_wiki_page_list(self):
         response = wiki_api.get_wiki_page_list(project_id_or_key=self.args.project)
-        wikis = [self._convert_res_to_dict(wiki) for wiki in response.content]
+        wikis = self._convert_res_to_dict(response)
         return wikis
 
     def get_project_data(self):
