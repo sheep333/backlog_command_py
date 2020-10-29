@@ -11,8 +11,8 @@ from pybacklogpy.Wiki import Wiki, WikiAttachment, WikiSharedFile
 
 class MyRequestSender(RequestSender):
 
-    def __init__(self, download_path, config=None):
-        super().__init__()
+    def __init__(self, config, download_path):
+        super().__init__(config)
         self.download_path = download_path
 
     def get_file(self, path: str, url_param):
@@ -41,12 +41,14 @@ class MyRequestSender(RequestSender):
         return f'{self.download_path}/{filename}', response
 
 
-def changed_init(self, download_path, config):
-    self.__init__(self, config)
-    self.rs = MyRequestSender(download_path, config)
+def changed_init(self, config, download_path='./output/'):
+    self.old_init(config)
+    self.rs = MyRequestSender(config, download_path)
 
 
 def apply_patch():
     class_list = [Issue, IssueAttachment, IssueComment, IssueSharedFile, Project, User, Wiki, WikiAttachment, WikiSharedFile]
     for backlog_class in class_list:
+        old_init = backlog_class.__init__
         backlog_class.__init__ = changed_init
+        backlog_class.old_init = old_init

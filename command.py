@@ -22,19 +22,20 @@ logger.setLevel(logging.DEBUG)
 
 config = BacklogComConfigure(space_key=SPACE_KEY, api_key=API_KEY)
 # TODO: パッチを当てたので、引数にoutput用のディレクトリを追加
-issue_api = Issue(config)
-issue_attachment_api = IssueAttachment(config)
-issue_comment_api = IssueComment(config)
-project_api = Project(config)
-sharedfile_api = SharedFile(config)
-user_api = User(config)
-wiki_api = Wiki(config)
-wiki_attachment_api = WikiAttachment(config)
-wiki_sharedfile_api = WikiSharedFile(config)
 
 
 class Command:
     def __init__(self):
+        self.issue_api = Issue(config)
+        self.issue_attachment_api = IssueAttachment(config)
+        self.issue_comment_api = IssueComment(config)
+        self.project_api = Project(config)
+        self.sharedfile_api = SharedFile(config)
+        self.user_api = User(config)
+        self.wiki_api = Wiki(config)
+        self.wiki_attachment_api = WikiAttachment(config)
+        self.wiki_sharedfile_api = WikiSharedFile(config)
+
         parser = argparse.ArgumentParser(description='BacklogのAPIをコマンド化したもの')
 
         parser.add_argument(
@@ -101,36 +102,36 @@ class Command:
         return json.loads(response.content.decode('utf-8'))
 
     def get_users(self):
-        response = user_api.get_user_list()
+        response = self.user_api.get_user_list()
         return self._convert_res_to_dict(response)
 
     def get_issues(self):
-        response = issue_api.get_issue_list()
+        response = self.issue_api.get_issue_list()
         return self._convert_res_to_dict(response)
 
     def get_project(self):
-        response = project_api.get_project(project_id_or_key=self.args.project)
+        response = self.project_api.get_project(project_id_or_key=self.args.project)
         return self._convert_res_to_dict(response)
 
     def get_projects(self):
-        response = project_api.get_project_list()
+        response = self.project_api.get_project_list()
         return self._convert_res_to_dict(response)
 
     def get_project_issues(self):
-        response = issue_api.get_issue_list(project_id=self.args.project)
+        response = self.issue_api.get_issue_list(project_id=self.args.project)
         return self._convert_res_to_dict(response)
 
     def get_project_users(self):
-        response = project_api.get_project_user_list(project_id_or_key=self.args.project)
+        response = self.project_api.get_project_user_list(project_id_or_key=self.args.project)
         project_users = self._convert_res_to_dict(response)
         return project_users
 
     def get_issue_comments(self, issue_id):
-        response = issue_comment_api.get_comment_list(issue_id_or_key=issue_id)
+        response = self.issue_comment_api.get_comment_list(issue_id_or_key=issue_id)
         return self._convert_res_to_dict(response)
 
     def get_wiki_page_list(self):
-        response = wiki_api.get_wiki_page_list(project_id_or_key=self.args.project)
+        response = self.wiki_api.get_wiki_page_list(project_id_or_key=self.args.project)
         return self._convert_res_to_dict(response)
 
     def get_project_data(self):
@@ -142,19 +143,19 @@ class Command:
         comments = []
         for issue in issues:
             for attachment in issue['attachments']:
-                path = issue_attachment_api.get_issue_attachment(issue_id_or_key=issue['id'], attachment_id=attachment['id'])
+                path = self.issue_attachment_api.get_issue_attachment(issue_id_or_key=issue['id'], attachment_id=attachment['id'])
                 logger.info(f"Saved issue attachment: {path}")
             for shared_file in issue['sharedFiles']:
-                path = sharedfile_api.get_file(project_id_or_key=self.args.project, shared_file_id=shared_file['id'])
+                path = self.sharedfile_api.get_file(project_id_or_key=self.args.project, shared_file_id=shared_file['id'])
                 logger.info(f"Saved issue sharefile: {path}")
             comments.extend(self.get_issue_comments(issue["id"]))
 
         for wiki in wikis:
             for attachment in wiki['attachments']:
-                path = wiki_attachment_api.get_wiki_page_attachment(wiki_id=wiki['id'])
+                path = self.wiki_attachment_api.get_wiki_page_attachment(wiki_id=wiki['id'])
                 logger.info(f"Saved wiki attachment: {path}")
             for shared_file in wiki['sharedFiles']:
-                path = sharedfile_api.get_file(project_id_or_key=self.args.project, shared_file_id=shared_file['id'])
+                path = self.sharedfile_api.get_file(project_id_or_key=self.args.project, shared_file_id=shared_file['id'])
                 logger.info(f"Saved wiki sharefile: {path}")
 
         return project, issues, wikis, users, comments
