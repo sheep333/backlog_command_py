@@ -100,13 +100,11 @@ class Command:
 
     def get_users(self):
         response = user_api.get_user_list()
-        users = self._convert_res_to_dict(response)
-        return users
+        return self._convert_res_to_dict(response)
 
     def get_issues(self):
         response = issue_api.get_issue_list()
-        issues = self._convert_res_to_dict(response)
-        return issues
+        return self._convert_res_to_dict(response)
 
     def get_project(self):
         response = project_api.get_project(project_id_or_key=self.args.project)
@@ -114,13 +112,11 @@ class Command:
 
     def get_projects(self):
         response = project_api.get_project_list()
-        projects = self._convert_res_to_dict(response)
-        return projects
+        return self._convert_res_to_dict(response)
 
     def get_project_issues(self):
         response = issue_api.get_issue_list(project_id=self.args.project)
-        project_issues = self._convert_res_to_dict(response)
-        return project_issues
+        return self._convert_res_to_dict(response)
 
     def get_project_users(self):
         response = project_api.get_project_user_list(project_id_or_key=self.args.project)
@@ -129,13 +125,11 @@ class Command:
 
     def get_issue_comments(self, issue_id):
         response = issue_comment_api.get_comment_list(issue_id_or_key=issue_id)
-        comments = self._convert_res_to_dict(response)
-        return comments
+        return self._convert_res_to_dict(response)
 
     def get_wiki_page_list(self):
         response = wiki_api.get_wiki_page_list(project_id_or_key=self.args.project)
-        wikis = self._convert_res_to_dict(response)
-        return wikis
+        return self._convert_res_to_dict(response)
 
     def get_project_data(self):
         project = self.get_project()
