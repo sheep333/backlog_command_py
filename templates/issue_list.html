@@ -61,6 +61,7 @@
             </tr>
           </thead>
           <tbody>
+            {% for issue in issues %}
             <tr data-row-index="0" class="even js-no-child">
               <td data-column-name="issueType" class="cell-issue-type"><span class="pill pill--issue-type-7 -small">{{ issue.issueType.name }}</span></td>
               <td data-column-name="issueKey" class="cell-key js-issue-key"><a href="/PreViewIssue.action?key=PROJECT1-1&amp;projectId=128661&amp;statusId=1&amp;statusId=2&amp;statusId=3&amp;sort=UPDATED&amp;order=false&amp;simpleSearch=true&amp;allOver=false&amp;offset=0&amp;limit=20&amp;offset=0&amp;condition.currentOffset=0">{{ issue.issueKey }}</a>
@@ -111,6 +112,7 @@
                 {% endfor %}
               </td>
             </tr>
+            {% endfor %}
           </tbody>
         </table>
       </div>

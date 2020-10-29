@@ -63,7 +63,7 @@
                   <a href="/user/okCQWN8VXt" title="ANNAI_Sato" data-bind="attr: {href: creatorLink, title: creatorName }"><img class="image image--circle -x-large" src="/NulabAccountIcon.action?userId=325620&amp;name=large" data-bind="attr:{ src: creatorIcon}"></a>
                 </span>
                 <span class="user-icon-set__text -collapsed-trigger" data-bind="toggle:{toggleClass:'is_description-collapsed', target:'.js_ticket-collapsed'}">
-                  <span class="user-icon-set__name" data-bind="text: creatorName">{{}}</span><br>
+                  <span class="user-icon-set__name" data-bind="text: creatorName"></span><br>
                   <span class="user-icon-set__sub-line"><span>登録日</span>{{ issue.createdUser.name }}
                     <span class="ticket__collapsed-summary-separator">/</span><span class="ticket__collapsed-summary" data-bind="text: pureDescription">{{ issue.summary }}</span>
                   </span>
@@ -264,7 +264,7 @@
                 <div class="loom comment-content" data-bind="embed: content, highlight: {'global-search-keyword-highlight': $root.query, 'star-comment-highlight': highlightWords}, visible: !$parent.isEdit(id)">
                   <div>
                     <div class="markdown-body">
-                      {{ comment.content|markdown }}
+                      {{ comment.content }}
                     </div>
                   </div>
                 </div>
