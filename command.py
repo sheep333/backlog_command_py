@@ -71,8 +71,7 @@ class Command:
 
     def exec(self):
         if self.args.command != 'get_project_data':
-            response = eval(f'self.{self.args.command}')()
-            data = self._convert_res_to_dict(response)
+            data = eval(f'self.{self.args.command}')()
             self._create_output_file(data)
         else:
             project, issues, wikis, users, comments = self.get_project_data()
