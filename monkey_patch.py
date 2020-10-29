@@ -36,11 +36,11 @@ class MyRequestSender(RequestSender):
         response = requests.get(url=(self.api_url + path), params=params)
         if not response.ok:
             return '', response
-        with open(f'{self.download_path}/{filename}', mode='wb') as save_file:
         encode_filename = get_file_name(response.headers['Content-Disposition'])
         filename = urllib.parse.unquote(encode_filename)
+        with open(f'{self.download_path}{filename}', mode='wb') as save_file:
             save_file.write(response.content)
-        return f'{self.download_path}/{filename}', response
+        return f'{self.download_path}{filename}', response
 
 
 def changed_init(self, config, download_path='./output/'):
