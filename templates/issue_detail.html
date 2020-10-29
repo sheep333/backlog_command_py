@@ -113,7 +113,7 @@
               <div class="ticket__properties-value">
                 <a href="" title="" data-bind="attr:{ title: assignerName, href:assignerLink}" class="user-icon-set">
                   <span class="user-icon-set__user-icon">
-                    <img class="image image--circle -small" data-bind="attr:{ src: assignerIcon}, visible: assignerIcon" style="display:none" src="">
+                    <img class="image image--circle -small" data-bind="attr:{ src: assignerIcon}, visible: assignerIcon" src="">
                   </span>{{ issue.assignee.name }}
                 </a>
                 <a class="_week-trigger-text" data-bind="attr: {'href': '/find/PROJECT1?condition.assignerId=' + assignerId()}" href="/find/PROJECT1?condition.assignerId=-1">
@@ -176,38 +176,18 @@
       </div><!-- End ticket -->
       <div>
         <!-- ko with: accessoriesViewModel -->
-        <ul role="tablist" class="tab-buttons is_not-active-all" data-bind="css: {'is_not-active-all': notActiveAllTabs}">
+        <ul>
           <!-- ko with: attachmentTabViewModel -->
-          {% for attachment in issue_attachments %}
-          <li role="presentation" class="tab-buttons__item" data-bind="visible: isActivatable" style="display:none">
-            <button type="button" id="attachfileTabButton" role="tab" aria-controls="attachfile" class="tab-buttons__link js_tabControl_tab" data-bind="click: onClick, css: {is_active: isActive}, attr: {'aria-selected': isActive() ? 'true' : 'false'}" aria-selected="false">
-              <svg role="image" class="icon -medium">
-                <use xlink:href="/images/svg/sprite.symbol.svg#icon_attach_file"></use>
-              </svg>
-              <span class="tab-buttons__label">
-                添付ファイル
-                <span class="tab-buttons__label-number" aria-hidden="true">
-                  <span data-bind="text:'('+attachment().length+')'">(0)</span>
-                </span>
-              </span>
-            </button>
+          {% for attachment in issue.attachments %}
+          <li>
+            <a class="upload-item-list__name js_imageAttachment" href="./{{ attachment.name }}">{{attachment.name}}</a>
           </li>
           {% endfor %}
           <!-- /ko -->
           <!-- ko with: sharedFileTabViewModel -->
-          {% for file in issue_sharedfiles %}
-          <li role="presentation" class="tab-buttons__item" data-bind="visible: isActivatable" style="display:none">
-            <button type="button" id="sharedfileTabButton" role="tab" aria-controls="sharedfile" class="tab-buttons__link js_tabControl_tab" data-bind="click: onClick, css: {is_active: isActive}, attr: {'aria-selected': isActive() ? 'true' : 'false'}" aria-selected="false">
-              <svg role="image" class="icon -medium">
-                <use xlink:href="/images/svg/sprite.symbol.svg#icon_files"></use>
-              </svg>
-              <span class="tab-buttons__label">
-                共有ファイル
-                <span class="tab-buttons__label-number" aria-hidden="true">
-                  <span data-bind="text:'('+sharedFile().length+')'">{{ file.name }}</span>
-                </span>
-              </span>
-            </button>
+          {% for file in issue.sharedfiles %}
+          <li>
+            <a class="upload-item-list__name js_imageAttachment" href="./{{ file.name }}">{{file.name}}</a>
           </li>
           {% endfor %}
         </ul>
@@ -218,7 +198,7 @@
         <div class="comment-list-heading">
           <h3 class="title title--fourth comment-list-heading__title">
             コメント <span class="title-group__number">(
-              <!-- ko text: numComment -->{{ comments|length }}
+              <!-- ko text: numComment -->{{ issue.comments|length }}
               <!-- /ko -->)</span>
           </h3>
           <div class="comment-list-heading__view-options">
@@ -226,7 +206,7 @@
         </div>
         <div class="comment-list" data-bind="notifyRead: comments, css:{'is_not-yet-comment':numComment() == 0}">
           <!-- ko template: { name: displayMode, foreach: comments, as: 'comment'} -->
-          {% for comment in comments %}
+          {% for comment in issue.comments %}
           <div class="comment-item is_first" data-bind="attr: {id: 'comment-' + id},
     flush: $data.flush,
     css: {'is_collapsed': $parent.isCollapse(id), 'is_first':$parent.isFirst(id)},

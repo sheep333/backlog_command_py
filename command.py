@@ -140,15 +140,15 @@ class Command:
         wikis = self.get_wiki_page_list()
         users = self.get_project_users()
 
-        comments = []
         for issue in issues:
+            comments = []
             for attachment in issue['attachments']:
                 path = self.issue_attachment_api.get_issue_attachment(issue_id_or_key=issue['id'], attachment_id=attachment['id'])
                 logger.info(f"Saved issue attachment: {path}")
             for shared_file in issue['sharedFiles']:
                 path = self.sharedfile_api.get_file(project_id_or_key=self.args.project, shared_file_id=shared_file['id'])
                 logger.info(f"Saved issue sharefile: {path}")
-            comments.extend(self.get_issue_comments(issue["id"]))
+            issue['comments'] = self.get_issue_comments(issue["id"])
 
         for wiki in wikis:
             for attachment in wiki['attachments']:
