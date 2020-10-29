@@ -17,6 +17,8 @@ SPACE_KEY = str(os.getenv('SPACE_KEY'))
 API_KEY = os.getenv('API_KEY')
 
 logger = logging.getLogger(__name__)
+logger.addHandler(logging.StreamHandler())
+logger.setLevel(logging.DEBUG)
 
 config = BacklogComConfigure(space_key=SPACE_KEY, api_key=API_KEY)
 # TODO: パッチを当てたので、引数にoutput用のディレクトリを追加
