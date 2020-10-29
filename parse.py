@@ -1,4 +1,5 @@
-from jinja2 import Environment, FileSystemLoader
+from jinja2 import Environment, FileSystemLoader, Markup
+from markdown import markdown
 
 
 class Parse:
@@ -13,3 +14,6 @@ class Parse:
         html_file = open(f"{output_path}{file_name}", "w", encoding="utf-8")
         html_file.write(output_html)
         html_file.close()
+
+    def to_markdown(self, data):
+        return Markup(markdown(data))

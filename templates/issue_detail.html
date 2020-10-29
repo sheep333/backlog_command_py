@@ -64,7 +64,7 @@
                 </span>
                 <span class="user-icon-set__text -collapsed-trigger" data-bind="toggle:{toggleClass:'is_description-collapsed', target:'.js_ticket-collapsed'}">
                   <span class="user-icon-set__name" data-bind="text: creatorName"></span><br>
-                  <span class="user-icon-set__sub-line"><span>登録日</span>{{ issue.createdUser.name }}
+                  <span class="user-icon-set__sub-line"><span>登録日</span>{{ issue.created }}
                     <span class="ticket__collapsed-summary-separator">/</span><span class="ticket__collapsed-summary" data-bind="text: pureDescription">{{ issue.summary }}</span>
                   </span>
                 </span>
@@ -96,7 +96,7 @@
             </div><!-- END ticket__article-header -->
             <div class="ticket__description loom" id="issueDescription" data-bind="embed: description, highlight:{'global-search-keyword-highlight': $root.query}, checklist: description">
               <div class="markdown-body">
-                <p>issue1</p>
+                <p>{{ issue.description }}</p>
               </div>
             </div>
           </div><!-- End ticket__article -->

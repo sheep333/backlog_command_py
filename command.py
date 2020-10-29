@@ -74,19 +74,19 @@ class Command:
             data = eval(f'self.{self.args.command}')()
             self._create_output_file(data)
         else:
-            project, issues, wikis, users, comments = self.get_project_data()
-            parse = Parse()
+            self.parse = Parse()
+            project, issues, wikis, users = self.get_project_data()
 
             data = {
                 "project": project,
                 "issues": issues,
-                "wikis": wikis,
-                "comments": comments
+                "wikis": wikis
             }
-            parse.create_html_file('issue_list.html', 'issue_list.html', data)
+            self.parse.create_html_file('issue_list.html', 'issue_list.html', data)
             for issue in issues:
                 data["issue"] = issue
-                parse.create_html_file('issue_detail.html', f"issue_{issue['id']}.html", data)
+                data["issue"]["description"] = self.parse.to_markdown(issue["description"])
+                self.parse.create_html_file('issue_detail.html', f"issue_{issue['id']}.html", data)
 
     def _create_output_file(self, data):
         if self.args.output == "csv":
@@ -140,14 +140,17 @@ class Command:
         users = self.get_project_users()
 
         for issue in issues:
-            comments = []
+            issue['comments'] = self.get_issue_comments(issue["id"])
+            for comment in issue['comments']:
+                if "content" in comment and comment["content"] is not None:
+                    comment["content"] = self.parse.to_markdown(comment["content"])
+
             for attachment in issue['attachments']:
                 path = self.issue_attachment_api.get_issue_attachment(issue_id_or_key=issue['id'], attachment_id=attachment['id'])
                 logger.info(f"Saved issue attachment: {path}")
             for shared_file in issue['sharedFiles']:
                 path = self.sharedfile_api.get_file(project_id_or_key=self.args.project, shared_file_id=shared_file['id'])
                 logger.info(f"Saved issue sharefile: {path}")
-            issue['comments'] = self.get_issue_comments(issue["id"])
 
         for wiki in wikis:
             for attachment in wiki['attachments']:
@@ -157,4 +160,4 @@ class Command:
                 path = self.sharedfile_api.get_file(project_id_or_key=self.args.project, shared_file_id=shared_file['id'])
                 logger.info(f"Saved wiki sharefile: {path}")
 
-        return project, issues, wikis, users, comments
+        return project, issues, wikis, users
