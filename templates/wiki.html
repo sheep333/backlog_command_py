@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=1080">
+  <meta name="referrer" content="no-referrer">
+  <link rel="stylesheet" type="text/css" media="all" href="../css/tooltipster.bundle.min.css">
+  <link rel="stylesheet" type="text/css" media="all" href="../css/Wiki.css">
+  <link rel="stylesheet" type="text/css" media="all" href="../css/introjs.css">
+  <link rel="stylesheet" type="text/css" media="all" href="../css/introjs-flattener.css">
+  <title></title>
+</head>
+<body>
+  <header id="project-header" class="content-header" aria-label="プロジェクトヘッダー">
+    <div class="content-header__inner project-header">
+      <div class="header-icon-set project-header__summary">
+        <div class="header-icon-set__icon"><a href="/projects/PROJECT1">
+            <img src="/SpaceImage.action" alt="project logo" class="header-icon-set__image">
+          </a></div>
+        <h1 class="header-icon-set__text"><span class="header-icon-set__name">{{ project.name }}</span><span class="header-icon-set__key">{{ project.key }}</span></h1>
+      </div>
+      <div class="project-header__actions">
+      </div><!-- End project-header__actions -->
+    </div><!-- End content-header__inner -->
+  </header><!-- End content-header -->
+  <div class="content-outer">
+    <div id="wikicard">
+      <div id="loom" class="wiki-content loom">
+        <div class="markdown-body">
+          {{ wiki.content }}
+        </div>
+      </div>
+      <div class="file-attach" data-bind="folding:{cookieKey:'wiki', cookieSubKey:'attachment'}">
+        <h5 class="title title--fourth title-group__inline-title -clickable">
+            添付ファイル
+        </h5>
+        <div>
+          <div id="attachmentsLoading" style="text-align: center; width: 100%; display: none;">
+            <span class="loading--circle -small"></span>
+          </div>
+          <div id="attachments">
+            <ul class="upload-item-list -list-view _mg-t-10 is_visible" id="attachment-list">
+              {% for attachment in wiki.attachments %}
+              <li class="upload-item-list__item">
+                <a class="upload-item-list__name" href="./{{ attachment.name }}" target="_blank">{{attachment.name}}</a>
+                <span class="upload-item-list__info" style="color:gray">
+                  ({{ attachment.size }} : {{ attachment.created }})
+                </span>
+              </li>
+              {% endfor %}
+              {% for file in wiki.sharedFiles %}
+              <li class="upload-item-list__item">
+                <a class="upload-item-list__name" href="./{{ file.name }}" target="_blank">{{file.name}}</a>
+                <span class="upload-item-list__info" style="color:gray">
+                  ({{ file.size }} : {{ file.created }})
+                </span>
+              </li>
+              {% endfor %}
+            </ul>
+            <!-- random-length HTML comment: V7MOURbbHOt7qfvuGADFxO3ZiyLDAcQTZchrr6GzK0wyThhXfkdSxUpVJzWHRmYoD6Tu0ZjBNTxhyU4T3VjqqN9xCV4R5S38MMrDjQCxixUWGMo9iNnMam9a51ryJkvUucVUsVHOGZlMjPJFawR1WQRPH7EPhzhQP0i5LpKPCvcj8lpYW4PqJf6Oc8b7v8LAyt57WFNWyn6wOjLibYPk1JzTFQP0NY09It7ezIzlvvY7Sjet5rSx0FE5TRtgqhgyQbQDhFpQyDNGkpydWEQKJVFckw9QTdCk2RlZWQpJR0Nzg9T0DjBM2Enb1krKDss39USTi5cyvqnPp6GteF3UJgvAEbJFJ18GJQZqJ2e3gFIJCM0eRuwbOgZR7iWEYVKfjhLtXpm3vsBv51NKj7jwd9DYhZa3siZSGk9dOjV7RUqKL1Vvy2fS1ioX5FQmnp2rO1JcacXpwDy74Hqq9J61rlOlocLRID7W4GwSiJ5UKtPC06syDpptQ1U4TfJZgGvaKfqqmjAwROwHIf5LIi4YZMQrrXGLc0lmVPR6xRqEfdJl8DxElrc94qqjBwvdkUE6iV0VkgZE9ip5lc9LIZKADyjFiSgJnkDJ33eeZ1gXXLS7mQIupQsrCRwkiSrJ1sSuluM9jsW64m1e27MgN4NNJ7wrNd0EKIxv09sZsCWkpNEfLO9WIKiPFU7TvvX52KpsIXG0acYDnaiwogHuqn9w74DqoakgjPMrkSf8s3BWRiG5ELnsykctffYH48ndLzIvInu0etKvRPoVYRCNze4SAQZ2OCVX2bH8Czwgi7P0M1JiGJt5ooOm2neHoxceOjcQYOu7J7vTy224ClzoNBQGpsLRdnvrNN5jZnejkP0WGsQIUDwfDAlqqw7JYsyj3rIQUnx20oO6WcCodyIgwtMceJl2 -->
+          </div>
+        </div><!-- attach -->
+      </div>
+    </div>
+    <div class="user-history">
+      <div class="user-icon-set user-history__account">
+        <a class="user-icon-set__user-icon -img-medium" href="./users/{{ wiki.createdUser.userId }}" title="{{ wiki.createdUser.name }}さんのプロフィール">
+          <img src="./users/{{ wiki.createdUser.userId }}" alt="" class="image image--circle -medium">
+        </a>
+        <span class="user-icon-set__text">
+          {{ wiki.createdUser.name }}によって {{ wiki.created }} に作成されました。
+        </span>
+      </div>
+      <div class="user-icon-set user-history__account">
+        <a class="user-icon-set__user-icon -img-medium" href="./users/{{ wiki.updatedUser.userId }}" title="{{ wiki.updatedUser.name }}さんのプロフィール">
+          <img src="./users/{{ wiki.updatedUser.userId }}" alt="" class="image image--circle -medium">
+        </a>
+        <span class="user-icon-set__text">
+          {{ wiki.updatedUser.name }}によって {{ wiki.updated }} に最終更新されました。
+        </span>
+      </div>
+    </div>
+</body>

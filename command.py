@@ -78,14 +78,19 @@ class Command:
 
             data = {
                 "project": project,
-                "issues": issues,
-                "wikis": wikis
+                "issues": issues
             }
             self.parse.create_html_file('issue_list.html', 'issue_list.html', data)
             for issue in issues:
                 data["issue"] = issue
                 data["issue"]["description"] = self.parse.to_markdown(issue["description"])
                 self.parse.create_html_file('issue_detail.html', f"issue_{issue['id']}.html", data)
+            del data['issues'], data['issue']
+
+            for wiki in wikis:
+                data["wiki"] = wiki
+                wiki["content"] = self.parse.to_markdown(wiki["content"])
+                self.parse.create_html_file('wiki.html', f"wiki_{wiki['id']}.html", data)
 
     def _create_output_file(self, data):
         if self.args.output == "csv":
