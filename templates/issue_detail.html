@@ -168,8 +168,19 @@
                   <div class="ticket__properties-label">完了理由</div>
                   <div class="ticket__properties-value" data-bind="text: resolution">{{ issue.resolution.name }}</div>
                 </div>
-              </div><!-- ticket__properties 02 -->
-              <div class="ticket__properties -one-col" data-bind="foreach:customFields"></div><!-- ticket__properties 03 -->
+              </div>
+              <div class="ticket__properties -one-col">
+                {% for field in issue.customFields %}
+                <div class="ticket__properties-item -custom-field">
+                  <div class="ticket__properties-label" data-bind="text:field">{{ field.name }}</div>
+                  <div class="ticket__properties-value loom" data-bind="html:value, highlight:{'global-search-keyword-highlight': {words: $root.query, forceUpdateObserver: value}}">
+                    <div class="markdown-body">
+                      <p>{{ field.value }}</p>
+                    </div>
+                  </div>
+                </div>
+                {% endfor %}
+              </div>
             </div><!-- End ticketPropertiesCollapsed -->
           </div>
         </div><!-- End issuecard -->
