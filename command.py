@@ -130,7 +130,9 @@ class Command:
 
     def get_wiki_page_list(self):
         response = self.wiki_api.get_wiki_page_list(project_id_or_key=self.args.project)
-        return self._convert_res_to_dict(response)
+        wikis_list = self._convert_res_to_dict(response)
+        # 一覧に含まれるWikiにはcontentが含まれないため、改めて取得する
+        return [self._convert_res_to_dict(self.wiki_api.get_wiki_page(wiki["id"])) for wiki in wikis_list]
 
     def get_project_data(self):
         project = self.get_project()
