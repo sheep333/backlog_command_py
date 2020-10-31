@@ -78,14 +78,19 @@ class Command:
 
             data = {
                 "project": project,
-                "issues": issues,
-                "wikis": wikis
+                "issues": issues
             }
             self.parse.create_html_file('issue_list.html', 'issue_list.html', data)
             for issue in issues:
                 data["issue"] = issue
                 data["issue"]["description"] = self.parse.to_markdown(issue["description"])
                 self.parse.create_html_file('issue_detail.html', f"issue_{issue['id']}.html", data)
+            del data['issues'], data['issue']
+
+            for wiki in wikis:
+                data["wiki"] = wiki
+                wiki["content"] = self.parse.to_markdown(wiki["content"])
+                self.parse.create_html_file('wiki.html', f"wiki_{wiki['id']}.html", data)
 
     def _create_output_file(self, data):
         if self.args.output == "csv":
@@ -130,7 +135,9 @@ class Command:
 
     def get_wiki_page_list(self):
         response = self.wiki_api.get_wiki_page_list(project_id_or_key=self.args.project)
-        return self._convert_res_to_dict(response)
+        wikis_list = self._convert_res_to_dict(response)
+        # 一覧に含まれるWikiにはcontentが含まれないため、改めて取得する
+        return [self._convert_res_to_dict(self.wiki_api.get_wiki_page(wiki["id"])) for wiki in wikis_list]
 
     def get_project_data(self):
         project = self.get_project()
