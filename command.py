@@ -7,11 +7,11 @@ import pandas as pd
 from pybacklogpy.BacklogConfigure import BacklogComConfigure
 from pybacklogpy.Issue import Issue, IssueAttachment, IssueComment
 from pybacklogpy.Project import Project
-from pybacklogpy.SharedFile import SharedFile
 from pybacklogpy.User import User
-from pybacklogpy.Wiki import Wiki, WikiAttachment, WikiSharedFile
+from pybacklogpy.Wiki import Wiki, WikiAttachment
 
 from parse import Parse
+from monkey_patch import MySharedFile
 
 SPACE_KEY = str(os.getenv('SPACE_KEY'))
 API_KEY = os.getenv('API_KEY')
@@ -30,11 +30,10 @@ class Command:
         self.issue_attachment_api = IssueAttachment(config)
         self.issue_comment_api = IssueComment(config)
         self.project_api = Project(config)
-        self.sharedfile_api = SharedFile(config)
+        self.sharedfile_api = MySharedFile(config)
         self.user_api = User(config)
         self.wiki_api = Wiki(config)
         self.wiki_attachment_api = WikiAttachment(config)
-        self.wiki_sharedfile_api = WikiSharedFile(config)
 
         parser = argparse.ArgumentParser(description='BacklogのAPIをコマンド化したもの')
 
@@ -154,7 +153,7 @@ class Command:
 
         for wiki in wikis:
             for attachment in wiki['attachments']:
-                path = self.wiki_attachment_api.get_wiki_page_attachment(wiki_id=wiki['id'])
+                path = self.wiki_attachment_api.get_wiki_page_attachment(wiki_id=wiki['id'], attachment_id=attachment['id'])
                 logger.info(f"Saved wiki attachment: {path}")
             for shared_file in wiki['sharedFiles']:
                 path = self.sharedfile_api.get_file(project_id_or_key=self.args.project, shared_file_id=shared_file['id'])
