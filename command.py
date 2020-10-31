@@ -154,7 +154,7 @@ class Command:
 
         for wiki in wikis:
             for attachment in wiki['attachments']:
-                path = self.wiki_attachment_api.get_wiki_page_attachment(wiki_id=wiki['id'])
+                path = self.wiki_attachment_api.get_wiki_page_attachment(wiki_id=wiki['id'], attachment_id=attachment['id'])
                 logger.info(f"Saved wiki attachment: {path}")
             for shared_file in wiki['sharedFiles']:
                 path = self.sharedfile_api.get_file(project_id_or_key=self.args.project, shared_file_id=shared_file['id'])
