@@ -77,26 +77,29 @@ class Command:
             project, issues, wikis, users = self.get_project_data()
 
             data = {
-                "project": project,
-                "issues": issues
+                'project': project,
+                'issues': issues
             }
             self.parse.create_html_file('issue_list.html', 'issue_list.html', data)
+            logger.info('Create issue_list.html')
             for issue in issues:
-                data["issue"] = issue
-                data["issue"]["description"] = self.parse.to_markdown(issue["description"])
-                self.parse.create_html_file('issue_detail.html', f"issue_{issue['id']}.html", data)
+                data['issue'] = issue
+                data['issue']['description'] = self.parse.to_markdown(issue['description'])
+                self.parse.create_html_file('issue_detail.html', f'issue_{issue["id"]}.html', data)
+                logger.info(f'Create issue_{issue["id"]}.html')
             del data['issues'], data['issue']
 
             for wiki in wikis:
-                data["wiki"] = wiki
-                wiki["content"] = self.parse.to_markdown(wiki["content"])
-                self.parse.create_html_file('wiki.html', f"wiki_{wiki['id']}.html", data)
+                data['wiki'] = wiki
+                wiki['content'] = self.parse.to_markdown(wiki['content'])
+                self.parse.create_html_file('wiki.html', f'wiki_{wiki["id"]}.html', data)
+                logger.info(f'Create wiki_{wiki["id"]}.html')
 
     def _create_output_file(self, data):
-        if self.args.output == "csv":
+        if self.args.output == 'csv':
             df = pd.DataFrame(data)
-            df.to_csv(f"{self.args.dir}{self.args.command}.csv")
-        elif self.args.output == "json":
+            df.to_csv(f'{self.args.dir}{self.args.command}.csv')
+        elif self.args.output == 'json':
             for index, d in enumerate(data):
                 data_file = open(f'{self.args.dir}{self.args.command}_{index}.json', 'w')
                 json.dump(data, data_file, ensure_ascii=False, indent=2)
@@ -137,33 +140,38 @@ class Command:
         response = self.wiki_api.get_wiki_page_list(project_id_or_key=self.args.project)
         wikis_list = self._convert_res_to_dict(response)
         # 一覧に含まれるWikiにはcontentが含まれないため、改めて取得する
-        return [self._convert_res_to_dict(self.wiki_api.get_wiki_page(wiki["id"])) for wiki in wikis_list]
+        return [self._convert_res_to_dict(self.wiki_api.get_wiki_page(wiki['id'])) for wiki in wikis_list]
 
     def get_project_data(self):
         project = self.get_project()
+        logger.info('Get project data')
         issues = self.get_project_issues()
+        logger.info('Get project issues')
         wikis = self.get_wiki_page_list()
+        logger.info('Get project wiki')
         users = self.get_project_users()
+        logger.info('Get project users')
 
         for issue in issues:
-            issue['comments'] = self.get_issue_comments(issue["id"])
+            issue['comments'] = self.get_issue_comments(issue['id'])
             for comment in issue['comments']:
-                if "content" in comment and comment["content"] is not None:
-                    comment["content"] = self.parse.to_markdown(comment["content"])
+                if 'content' in comment and comment['content'] is not None:
+                    comment['content'] = self.parse.to_markdown(comment['content'])
+            logger.info('Get comments')
 
             for attachment in issue['attachments']:
                 path = self.issue_attachment_api.get_issue_attachment(issue_id_or_key=issue['id'], attachment_id=attachment['id'])
-                logger.info(f"Saved issue attachment: {path}")
+                logger.info(f'Saved issue attachment: {path}')
             for shared_file in issue['sharedFiles']:
                 path = self.sharedfile_api.get_file(project_id_or_key=self.args.project, shared_file_id=shared_file['id'])
-                logger.info(f"Saved issue sharefile: {path}")
+                logger.info(f'Saved issue sharefile: {path}')
 
         for wiki in wikis:
             for attachment in wiki['attachments']:
                 path = self.wiki_attachment_api.get_wiki_page_attachment(wiki_id=wiki['id'], attachment_id=attachment['id'])
-                logger.info(f"Saved wiki attachment: {path}")
+                logger.info(f'Saved wiki attachment: {path}')
             for shared_file in wiki['sharedFiles']:
                 path = self.sharedfile_api.get_file(project_id_or_key=self.args.project, shared_file_id=shared_file['id'])
-                logger.info(f"Saved wiki sharefile: {path}")
+                logger.info(f'Saved wiki sharefile: {path}')
 
         return project, issues, wikis, users
