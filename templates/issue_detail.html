@@ -33,9 +33,6 @@
           <div class="ticket__key -has-button">
             <span class="pill pill--issue-type-7" data-bind="css:issueTypeStyle, text: issueType">{{ issue.issueType.name }}</span>
             <span class="ticket__key-number" data-bind="text: key">{{ issue.issueKey }}</span>
-            <wrapped-copy-button params="{copyButtonParam:$root.copyIssueKeyButton, toolTip:'課題キーと件名をクリップボードにコピーします。Shiftキーを押しながらクリックすると課題キーのみがコピーされます。', css:'ticket__key-copy'}"><span id="copyKey-help" class="copy-key-btn ticket__key-copy" data-bind="css:css"><a href="javascript:void(0)" role="button" data-bind="css: buttonCss, attr:{'data-tooltip':toolTip}, click:doCopy" class="icon-button icon-button--default | simptip-position-right simptip-movable simptip-smooth simptip-multiline -copy-button-multiline" data-tooltip="課題キーと件名をクリップボードにコピーします。Shiftキーを押しながらクリックすると課題キーのみがコピーされます。"><span class="_assistive-text" data-bind="text:toolTip">課題キーと件名をクリップボードにコピーします。Shiftキーを押しながらクリックすると課題キーのみがコピーされます。</span><span class="copy-trigger"><svg role="image" class="icon -medium ">
-                      <use xlink:href="/images/svg/sprite.symbol.svg#icon_copy"></use>
-                    </svg></span><span id="copyKey" data-bind="copyButton: copyButtonParam"></span></a></span></wrapped-copy-button>
           </div>
           <div class="ticket__date">
             <span class="ticket__date-item">
@@ -105,7 +102,6 @@
               <div class="ticket__properties-label">優先度</div>
               <div class="ticket__properties-value">
                 <div data-bind="visible:false">{{ issue.priority.name }}</div>
-                <a class="_week-trigger-text" data-bind="text: priority, attr: {'href': '/find/PROJECT1?condition.priority=' + priorityId()}" href="/find/PROJECT1?condition.priority=3">中</a>
               </div>
             </div>
             <div class="ticket__properties-item -assigner">
@@ -243,7 +239,7 @@
               </div><!-- End .comment-item__header -->
               <div class="comment-item__container js_comment-container">
                 <ul class="comment-changelog" data-bind="foreach: changelog">
-                  {% for log in comment.changelog %}
+                  {% for log in comment.changeLog %}
                   <li class="comment-changelog__item" data-bind="css: {commit: commit}">
                     <span class="comment-changelog__label" data-bind="text: field">{{ log.field }}</span>:
                     <span data-bind="text: originalValue">{{ log.originalValue }}</span>
