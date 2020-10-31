@@ -7,7 +7,8 @@ from pybacklogpy.Issue import (Issue, IssueAttachment, IssueComment,
 from pybacklogpy.modules import RequestSender
 from pybacklogpy.Project import Project
 from pybacklogpy.User import User
-from pybacklogpy.Wiki import Wiki, WikiAttachment, WikiSharedFile
+from pybacklogpy.Wiki import Wiki, WikiAttachment
+from pybacklogpy.SharedFile import SharedFile
 
 
 class MyRequestSender(RequestSender):
@@ -43,13 +44,22 @@ class MyRequestSender(RequestSender):
         return f'{self.download_path}{filename}', response
 
 
+class MySharedFile(SharedFile):
+
+    def get_file(self, project_id_or_key, shared_file_id):
+        path = self.base_path + '/{project_id_or_key}/files/{shared_file_id}'\
+            .format(project_id_or_key=project_id_or_key, shared_file_id=shared_file_id)
+
+        return self.rs.get_file(path=path, url_param={})
+
+
 def changed_init(self, config, download_path='./output/'):
     self.old_init(config)
     self.rs = MyRequestSender(config, download_path)
 
 
 def apply_patch():
-    class_list = [Issue, IssueAttachment, IssueComment, IssueSharedFile, Project, User, Wiki, WikiAttachment, WikiSharedFile]
+    class_list = [Issue, IssueAttachment, IssueComment, IssueSharedFile, Project, User, Wiki, WikiAttachment, MySharedFile]
     for backlog_class in class_list:
         old_init = backlog_class.__init__
         backlog_class.__init__ = changed_init
