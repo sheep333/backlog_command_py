@@ -18,7 +18,7 @@
     <div class="content-header__inner project-header">
       <div class="header-icon-set project-header__summary">
         <div class="header-icon-set__icon">
-          <img src="{{ project.icon}}" alt="project logo" class="header-icon-set__image">
+          <img src="{{ project.icon }}" alt="project logo" class="header-icon-set__image">
         </div>
         <h1 class="header-icon-set__text"><span class="header-icon-set__name">{{ project.name }}</span><span class="header-icon-set__key">{{ project.key }}</span></h1>
       </div>
@@ -55,38 +55,14 @@
             <div class="ticket__article-header">
               <div class="user-icon-set -collapsed-trigger">
                 <span class="user-icon-set__user-icon">
-                  <a href="/user/okCQWN8VXt" title="ANNAI_Sato" data-bind="attr: {href: creatorLink, title: creatorName }"><img class="image image--circle -x-large" src="/NulabAccountIcon.action?userId=325620&amp;name=large" data-bind="attr:{ src: creatorIcon}"></a>
+                  <img class="image image--circle -x-large" src="{{ issue.createdUser.icon }}"></a>
                 </span>
-                <span class="user-icon-set__text -collapsed-trigger" data-bind="toggle:{toggleClass:'is_description-collapsed', target:'.js_ticket-collapsed'}">
-                  <span class="user-icon-set__name" data-bind="text: creatorName"></span><br>
+                <span class="user-icon-set__text -collapsed-trigger">
+                  <span class="user-icon-set__name"></span><br>
                   <span class="user-icon-set__sub-line"><span>登録日</span>{{ issue.created }}
                     <span class="ticket__collapsed-summary-separator">/</span><span class="ticket__collapsed-summary" data-bind="text: pureDescription">{{ issue.summary }}</span>
                   </span>
                 </span>
-              </div>
-              <div class="ticket__article-actions">
-                <button type="button" data-bind="click: quoteIssueDescription, clickBubble: false, visible: description" class="icon-button icon-button--default ticket__quote -with-text" style="">
-                  <svg role="image" class="icon -medium">
-                    <use xlink:href="/images/svg/sprite.symbol.svg#icon_quote"></use>
-                  </svg>
-                  <span class="_assistive-text">引用</span>
-                </button>
-                <star params="{starJsons:starJsons, starUrl:starUrl, projectId: starProjectId, title: starTitle,
-                          awardId: starAwardId, highlightWordsObserver: highlightWords}"><span class="star-wrapper">
-                    <button type="button" tabindex="0" class="icon-button icon-button--default star-button" data-bind="click:addStar, css:css, event:{mouseout: blur, mouseover: calcStarListPosition}">
-                      <span class="star-button__icon__animation-sets js-star-button__icon__animation-sets">
-                        <span class="star-button__icon__animation-set js-star-button__icon__animation-set">
-                          <span class="star-button__icon"><span class="star-button__icon-inner"><span class="star-button__icon-inner-2"><svg role="image" class="icon -medium" data-bind="css: starModifier">
-                                  <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/images/svg/sprite.symbol.svg#icon_star"></use>
-                                </svg></span></span></span>
-                        </span>
-                      </span>
-                      <span class="_assistive-text">スター</span>
-                      <span class="star-button__number" data-bind="text:starCount" aria-live="polite">0</span>
-                    </button>
-                    <!-- ko if: starJsons().length -->
-                    <!-- /ko -->
-                  </span></star>
               </div>
             </div><!-- END ticket__article-header -->
             <div class="ticket__description loom" id="issueDescription" data-bind="embed: description, highlight:{'global-search-keyword-highlight': $root.query}, checklist: description">
@@ -107,7 +83,7 @@
               <div class="ticket__properties-value">
                 <a href="" title="" data-bind="attr:{ title: assignerName, href:assignerLink}" class="user-icon-set">
                   <span class="user-icon-set__user-icon">
-                    <img class="image image--circle -small" data-bind="attr:{ src: assignerIcon}, visible: assignerIcon" src="">
+                    <img class="image image--circle -small" src="">
                   </span>{{ issue.assignee.name }}
                 </a>
                 <a class="_week-trigger-text" data-bind="attr: {'href': '/find/PROJECT1?condition.assignerId=' + assignerId()}" href="/find/PROJECT1?condition.assignerId=-1">
@@ -212,23 +188,16 @@
         <div class="comment-list" data-bind="notifyRead: comments, css:{'is_not-yet-comment':numComment() == 0}">
           <!-- ko template: { name: displayMode, foreach: comments, as: 'comment'} -->
           {% for comment in issue.comments %}
-          <div class="comment-item is_first" data-bind="attr: {id: 'comment-' + id},
-    flush: $data.flush,
-    css: {'is_collapsed': $parent.isCollapse(id), 'is_first':$parent.isFirst(id)},
-    visible: $parent.commentVisible($data)" id="comment-47354086">
+          <div class="comment-item is_first">
             <div class="comment-item__inner">
               <a class="page-section-anchor -double-header" data-bind="attr: {name: 'comment-' + id}" name="comment-47354086">&nbsp;</a>
               <div class="comment-item__header">
-                <div class="user-icon-set -collapsed-trigger" data-bind="click: function(){$parent.toggleCollapse($data)}">
-                  <a href="/user/okCQWN8VXt" class="user-icon-set__user-icon comment-item__user-icon" data-bind="attr: {'href': '/user/' + createdUserId, title: $parent.userTitle(createdUser) }, click: function() { return true; }, clickBubble: false" title="ANNAI_Satoさんのプロフィール">
-                    <!-- ko if: createdUser && createdUser.icon && createdUser.icon !== '' -->
-                    <img src="/NulabAccountIcon.action?userId=325620&amp;name=large" class="image image--circle -x-large" alt="" data-bind="attr: {src: Backlog.getUserIconUrl(icon)}">
-                    <!-- /ko-->
-                  </a>
+                <div class="user-icon-set -collapsed-trigger">
+                  <img src="{{ comment.createdUser.icon }}" class="image image--circle -x-large" alt="" data-bind="attr: {src: Backlog.getUserIconUrl(icon)}">
                   <span class="user-icon-set__text comment-item__user-text">
                     <span class="user-icon-set__name" data-bind="text: createdUser.name">{{ comment.createdUser.name }}</span><br>
                     <span class="user-icon-set__sub-line">
-                      <a href="#comment-47354086" class="user-icon-set__sub-line-anchor" data-bind="attr: {'href': '#comment-' + id }, text: createdOn, click: function(){$root.scrollToComment(id);}, clickBubble: false">{{ comment.created }}</a>
+                      <a href="" class="user-icon-set__sub-line-anchor">{{ comment.created }}</a>
                       <span class="comment-item__collapsed-summary-separator">/</span>
                       <span class="comment-item__collapsed-summary" data-bind="collapseSummary: $data">{{ comment.summary }}</span>
                     </span>

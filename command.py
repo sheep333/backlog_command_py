@@ -177,12 +177,12 @@ class Command:
         logger.info('Get project users')
 
         filepath, response = self.get_project_icon()
-        project['icon'] = filepath
+        project['icon'] = filepath.replace('/output', '')
 
         users_icon = {}
         for user in users:
             filepath, response = self.get_user_icon(user['id'])
-            users_icon[user['id']] = filepath
+            users_icon[user['id']] = filepath.replace('/output', '')
 
         for issue in issues:
             self._add_user_icon(issue, users_icon)
