@@ -56,7 +56,7 @@ class Command:
         parser.add_argument(
             '-o', '--output',
             help='アウトプットの形式',
-            default='csv',
+            default='json',
             choices=['csv', 'json']
         )
 
