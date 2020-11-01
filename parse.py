@@ -3,6 +3,9 @@ from markdown import markdown
 
 
 class Parse:
+    """
+    受け取ったデータをファイルとして作成するクラス
+    """
 
     def create_html_file(self, template_name, file_name, data, output_path="./output/"):
         """
@@ -16,6 +19,9 @@ class Parse:
         html_file.close()
 
     def to_markdown(self, data):
+        """
+        テキストデータのマークアップへの変換処理
+        """
         if data is None:
             data = ''
         return Markup(markdown(data))

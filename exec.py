@@ -13,6 +13,7 @@ def main():
         get_project_issues
         get_project_users
         get_wiki_page_list
+        get_project_data
 
     アウトプットの形式
         csv, json

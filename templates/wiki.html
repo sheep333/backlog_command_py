@@ -65,7 +65,7 @@
     <div class="user-history">
       <div class="user-icon-set user-history__account">
         <a class="user-icon-set__user-icon -img-medium" href="./users/{{ wiki.createdUser.userId }}" title="{{ wiki.createdUser.name }}さんのプロフィール">
-          <img src="./users/{{ wiki.createdUser.userId }}" alt="" class="image image--circle -medium">
+          <img src="{{ wiki.createdUser.icon }}" alt="" class="image image--circle -medium">
         </a>
         <span class="user-icon-set__text">
           {{ wiki.createdUser.name }}によって {{ wiki.created }} に作成されました。
@@ -73,7 +73,7 @@
       </div>
       <div class="user-icon-set user-history__account">
         <a class="user-icon-set__user-icon -img-medium" href="./users/{{ wiki.updatedUser.userId }}" title="{{ wiki.updatedUser.name }}さんのプロフィール">
-          <img src="./users/{{ wiki.updatedUser.userId }}" alt="" class="image image--circle -medium">
+          <img src="{{ wiki.updatedUser.icon }}" alt="" class="image image--circle -medium">
         </a>
         <span class="user-icon-set__text">
           {{ wiki.updatedUser.name }}によって {{ wiki.updated }} に最終更新されました。

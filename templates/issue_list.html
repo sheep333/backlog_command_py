@@ -16,7 +16,7 @@
     <div class="content-header__inner project-header">
       <div class="header-icon-set project-header__summary">
         <div class="header-icon-set__icon">
-          <img src="{{ project.icon}}" alt="project logo" class="header-icon-set__image">
+          <img src="{{ project.icon }}" alt="project logo" class="header-icon-set__image">
         </div>
         <h1 class="header-icon-set__text"><span class="header-icon-set__name">{{ project.name }}</span><span class="header-icon-set__key">{{ project.key }}</span></h1>
       </div>
@@ -58,7 +58,8 @@
             {% for issue in issues %}
             <tr data-row-index="0" class="even js-no-child">
               <td data-column-name="issueType" class="cell-issue-type"><span class="pill pill--issue-type-7 -small">{{ issue.issueType.name }}</span></td>
-              <td data-column-name="issueKey" class="cell-key js-issue-key"><a href="./issue_{{issue.issueKey}}">{{ issue.issueKey }}</a>
+              <td data-column-name="issueKey" class="cell-key js-issue-key">
+                <a href="./issue_{{issue.id}}.html">{{ issue.issueKey }}</a>
               </td>
               <td data-column-name="summary" class="cell-summary js-issue-title">{{ issue.issueKey }} {{ issue.summary }}</td>
               <td data-column-name="assignee" class="cell-user">{{ issue.assignee.name }}</td>
@@ -96,12 +97,12 @@
               </td>
               <td data-column-name="attachments" class="cell-file">
                 {% for attachment in issue.attachments %}
-                <a href="./attachment/{{ attachment.id }}">{{ attachment.name }}</a>
+                <a href="{{ attachment.name }}">{{ attachment.name }}</a>
                 {% endfor %}
               </td>
               <td data-column-name="sharedFiles" class="cell-file">
                 {% for file in issue.sharedFiles %}
-                <a href="./file/{{ file.id }}">{{ file.name }}</a>
+                <a href="{{ file.name }}">{{ file.name }}</a>
                 {% endfor %}
               </td>
             </tr>
