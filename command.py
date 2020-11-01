@@ -28,15 +28,15 @@ class Command:
     def __init__(self):
         self._command_parse()
         self._init_api()
+        self.parse = Parse()
 
     def exec(self):
         if self.args.command != 'get_project_data':
             # get_project_data以外はそのままコマンド名を実行
             data = eval(f'self.{self.args.command}')()
-            self._create_output_file(data)
+            self.parse.create_output_file(self.args.output, data)
         else:
             # get_project_dataは各種データをdictで取得
-            self.parse = Parse()
             project, issues, wikis, users = self.get_project_data()
 
             # 各テンプレートにデータを渡して、それぞれのHTMLファイルを出力
@@ -103,18 +103,6 @@ class Command:
         #     default='./output/'
         # )
         self.args = parser.parse_args()
-
-    def _create_output_file(self, data):
-        """
-        各種ファイルの出力
-        """
-        # if self.args.output == 'csv':
-        #    df = pd.DataFrame(data)
-        #    df.to_csv(f'{self.args.dir}{self.args.command}.csv')
-        if self.args.output == 'json':
-            for index, d in enumerate(data):
-                data_file = open(f'{self.args.dir}{self.args.command}_{index}.json', 'w')
-                json.dump(data, data_file, ensure_ascii=False, indent=2)
 
     def _convert_res_to_dict(self, response):
         """
