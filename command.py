@@ -2,6 +2,7 @@ import argparse
 import json
 import os
 import logging
+import re
 
 import pandas as pd
 from pybacklogpy.BacklogConfigure import BacklogComConfigure
@@ -84,14 +85,12 @@ class Command:
             logger.info('Create issue_list.html')
             for issue in issues:
                 data['issue'] = issue
-                data['issue']['description'] = self.parse.to_markdown(issue['description'])
                 self.parse.create_html_file('issue_detail.html', f'issue_{issue["id"]}.html', data)
                 logger.info(f'Create issue_{issue["id"]}.html')
             del data['issues'], data['issue']
 
             for wiki in wikis:
                 data['wiki'] = wiki
-                wiki['content'] = self.parse.to_markdown(wiki['content'])
                 self.parse.create_html_file('wiki.html', f'wiki_{wiki["id"]}.html', data)
                 logger.info(f'Create wiki_{wiki["id"]}.html')
 
@@ -106,6 +105,15 @@ class Command:
 
     def _convert_res_to_dict(self, response):
         return json.loads(response.content.decode('utf-8'))
+
+    def _convert_image_link(self, txt):
+        if txt is None:
+            return txt
+        filenames = re.findall(r'!\[image\]\[(.*)\]', txt)
+        for filename in filenames:
+            file_link = f'[{filename}](./{filename})'
+            txt = re.sub(r'!\[image\]\[(.*)\]', file_link, txt)
+        return txt
 
     def get_users(self):
         response = self.user_api.get_user_list()
@@ -153,9 +161,13 @@ class Command:
         logger.info('Get project users')
 
         for issue in issues:
+            description = self._convert_image_link(issue['description'])
+            issue['description'] = self.parse.to_markdown(description)
+
             issue['comments'] = self.get_issue_comments(issue['id'])
             for comment in issue['comments']:
-                comment['content'] = self.parse.to_markdown(comment['content'])
+                content = self._convert_image_link(comment['content'])
+                comment['content'] = self.parse.to_markdown(content)
             logger.info('Get comments')
 
             for attachment in issue['attachments']:
@@ -166,6 +178,8 @@ class Command:
                 logger.info(f'Saved issue sharefile: {path}')
 
         for wiki in wikis:
+            content = self._convert_image_link(wiki['content'])
+            wiki['content'] = self.parse.to_markdown(content)
             for attachment in wiki['attachments']:
                 path = self.wiki_attachment_api.get_wiki_page_attachment(wiki_id=wiki['id'], attachment_id=attachment['id'])
                 logger.info(f'Saved wiki attachment: {path}')
