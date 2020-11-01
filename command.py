@@ -26,56 +26,20 @@ config = BacklogComConfigure(space_key=SPACE_KEY, api_key=API_KEY)
 
 class Command:
     def __init__(self):
-        self.issue_api = Issue(config)
-        self.issue_attachment_api = IssueAttachment(config)
-        self.issue_comment_api = IssueComment(config)
-        self.project_api = Project(config)
-        self.sharedfile_api = MySharedFile(config)
-        self.user_api = MyUser(config)
-        self.wiki_api = Wiki(config)
-        self.wiki_attachment_api = WikiAttachment(config)
-
-        parser = argparse.ArgumentParser(description='BacklogのAPIをコマンド化したもの')
-
-        parser.add_argument(
-            'command',
-            help='Backlogの情報に対する操作をおこなう',
-            choices=[
-                'get_users',
-                'get_issues',
-                'get_projects',
-                'get_project_issues',
-                'get_project_users',
-                'get_wiki_page_list',
-                'get_project_data'
-            ]
-        )
-        parser.add_argument('-u', '--user', type=int, help='ユーザーID')
-        parser.add_argument('-p', '--project', help='プロジェクトID')
-
-        parser.add_argument(
-            '-o', '--output',
-            help='アウトプットの形式',
-            default='json',
-            choices=['csv', 'json']
-        )
-
-        parser.add_argument(
-            '--dir',
-            help='データを出力するディレクトリ名',
-            default='./output/'
-        )
-
-        self.args = parser.parse_args()
+        self._command_parse()
+        self._init_api()
 
     def exec(self):
         if self.args.command != 'get_project_data':
+            # get_project_data以外はそのままコマンド名を実行
             data = eval(f'self.{self.args.command}')()
             self._create_output_file(data)
         else:
+            # get_project_dataは各種データをdictで取得
             self.parse = Parse()
             project, issues, wikis, users = self.get_project_data()
 
+            # 各テンプレートにデータを渡して、それぞれのHTMLファイルを出力
             data = {
                 'project': project,
                 'issues': issues
@@ -93,7 +57,57 @@ class Command:
                 self.parse.create_html_file('wiki.html', f'wiki_{wiki["id"]}.html', data)
                 logger.info(f'Create wiki_{wiki["id"]}.html')
 
+    def _init_api(self):
+        """
+        BacklogのAPIを初期化
+        FIXME: output先のディレクトリを変更
+        """
+        self.issue_api = Issue(config)
+        self.issue_attachment_api = IssueAttachment(config)
+        self.issue_comment_api = IssueComment(config)
+        self.project_api = Project(config)
+        self.sharedfile_api = MySharedFile(config)
+        self.user_api = MyUser(config)
+        self.wiki_api = Wiki(config)
+        self.wiki_attachment_api = WikiAttachment(config)
+
+    def _command_parse(self):
+        """
+        コマンドラインから受け取った引数をパース
+        """
+        parser = argparse.ArgumentParser(description='BacklogのAPIをコマンド化したもの')
+        parser.add_argument(
+            'command',
+            help='Backlogの情報に対する操作をおこなう',
+            choices=[
+                'get_users',
+                'get_issues',
+                'get_projects',
+                'get_project_issues',
+                'get_project_users',
+                'get_wiki_page_list',
+                'get_project_data'
+            ]
+        )
+        parser.add_argument('-p', '--project', help='プロジェクトID')
+        # parser.add_argument('-u', '--user', type=int, help='ユーザーID')
+        # parser.add_argument(
+        #     '-o', '--output',
+        #     help='アウトプットの形式',
+        #     default='json',
+        #     choices=['csv', 'json']
+        # )
+        # parser.add_argument(
+        #     '--dir',
+        #     help='データを出力するディレクトリ名',
+        #     default='./output/'
+        # )
+        self.args = parser.parse_args()
+
     def _create_output_file(self, data):
+        """
+        各種ファイルの出力
+        """
         # if self.args.output == 'csv':
         #    df = pd.DataFrame(data)
         #    df.to_csv(f'{self.args.dir}{self.args.command}.csv')
@@ -103,6 +117,9 @@ class Command:
                 json.dump(data, data_file, ensure_ascii=False, indent=2)
 
     def _convert_res_to_dict(self, response):
+        """
+        レスポンスから必要なデータを取得しをdict型に変換
+        """
         return json.loads(response.content.decode('utf-8'))
 
     def _add_user_icon(self, obj, users_icon):
@@ -113,6 +130,9 @@ class Command:
         return
 
     def _convert_image_link(self, txt):
+        """
+        テキスト中のimageの記法をimgタグに置換
+        """
         if txt is None:
             return txt
         filenames = re.findall(r'!\[image\]\[(.*)\]', txt)
@@ -167,6 +187,9 @@ class Command:
         return [self._convert_res_to_dict(self.wiki_api.get_wiki_page(wiki['id'])) for wiki in wikis_list]
 
     def get_project_data(self):
+        """
+        APIデータの取得と整形
+        """
         project = self.get_project()
         logger.info('Get project data')
         issues = self.get_project_issues()
@@ -176,14 +199,19 @@ class Command:
         users = self.get_project_users()
         logger.info('Get project users')
 
+        # プロジェクトデータにアイコンを追加
         filepath, response = self.get_project_icon()
+        # FIXME: /outputの直接変換ではなく引数を判定して置換したい
         project['icon'] = filepath.replace('/output', '')
 
+        # ユーザアイコンの取得用dict作成
         users_icon = {}
         for user in users:
             filepath, response = self.get_user_icon(user['id'])
+            # FIXME: /outputの直接変換ではなく引数を判定して置換したい
             users_icon[user['id']] = filepath.replace('/output', '')
 
+        # 課題とそのコメントのアイコン追加、マークダウンへの変換処理、添付ファイル取得
         for issue in issues:
             self._add_user_icon(issue, users_icon)
             description = self._convert_image_link(issue['description'])
@@ -203,6 +231,7 @@ class Command:
                 filepath, response = self.sharedfile_api.get_file(project_id_or_key=self.args.project, shared_file_id=shared_file['id'])
                 logger.info(f'Saved issue sharefile: {filepath}')
 
+        # Wikiのマークダウンのアイコン追加、変換処理、添付ファイル取得
         for wiki in wikis:
             self._add_user_icon(wiki, users_icon)
             content = self._convert_image_link(wiki['content'])

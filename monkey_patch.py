@@ -12,7 +12,9 @@ from pybacklogpy.SharedFile import SharedFile
 
 
 class MyRequestSender(RequestSender):
-
+    """
+    ファイルのダウンロード処理のpathを変更できるようにしたパッチクラス
+    """
     def __init__(self, config, download_path):
         super().__init__(config)
         self.download_path = download_path
@@ -45,7 +47,9 @@ class MyRequestSender(RequestSender):
 
 
 class MySharedFile(SharedFile):
-
+    """
+    共有ファイルの取得用パッチ
+    """
     def get_file(self, project_id_or_key, shared_file_id):
         path = self.base_path + '/{project_id_or_key}/files/{shared_file_id}'\
             .format(project_id_or_key=project_id_or_key, shared_file_id=shared_file_id)
@@ -54,6 +58,9 @@ class MySharedFile(SharedFile):
 
 
 class MyUser(User):
+    """
+    ユーザアイコンの取得用パッチ
+    """
     def get_user_icon(self, user_id):
         path = self.base_path + '/{user_id}/icon'.format(user_id=str(user_id))
 
@@ -74,6 +81,9 @@ def changed_init(self, config, download_path='./output/'):
 
 
 def apply_patch():
+    """
+    各クラスの初期化で読み込んでいるRequestSenderのクラスを変更
+    """
     class_list = [Issue, IssueAttachment, IssueComment, IssueSharedFile, Project, MyUser, Wiki, WikiAttachment, MySharedFile]
     for backlog_class in class_list:
         old_init = backlog_class.__init__
