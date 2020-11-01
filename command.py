@@ -106,8 +106,10 @@ class Command:
         return json.loads(response.content.decode('utf-8'))
 
     def _add_user_icon(self, obj, users_icon):
-        obj['createdUser']['icon'] = users_icon[obj['createdUser']['id']]
-        obj['updatedUser']['icon'] = users_icon[obj['updatedUser']['id']]
+        if 'createdUser' in obj:
+            obj['createdUser']['icon'] = users_icon[obj['createdUser']['id']]
+        if 'updatedUser' in obj:
+            obj['updatedUser']['icon'] = users_icon[obj['updatedUser']['id']]
         return
 
     def _convert_image_link(self, txt):
