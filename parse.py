@@ -16,4 +16,6 @@ class Parse:
         html_file.close()
 
     def to_markdown(self, data):
+        if data is None:
+            data = ''
         return Markup(markdown(data))

@@ -155,8 +155,7 @@ class Command:
         for issue in issues:
             issue['comments'] = self.get_issue_comments(issue['id'])
             for comment in issue['comments']:
-                if 'content' in comment and comment['content'] is not None:
-                    comment['content'] = self.parse.to_markdown(comment['content'])
+                comment['content'] = self.parse.to_markdown(comment['content'])
             logger.info('Get comments')
 
             for attachment in issue['attachments']:
