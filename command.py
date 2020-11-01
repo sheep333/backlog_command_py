@@ -4,7 +4,7 @@ import os
 import logging
 import re
 
-import pandas as pd
+# import pandas as pd
 from pybacklogpy.BacklogConfigure import BacklogComConfigure
 from pybacklogpy.Issue import Issue, IssueAttachment, IssueComment
 from pybacklogpy.Project import Project
@@ -94,10 +94,10 @@ class Command:
                 logger.info(f'Create wiki_{wiki["id"]}.html')
 
     def _create_output_file(self, data):
-        if self.args.output == 'csv':
-            df = pd.DataFrame(data)
-            df.to_csv(f'{self.args.dir}{self.args.command}.csv')
-        elif self.args.output == 'json':
+        # if self.args.output == 'csv':
+        #    df = pd.DataFrame(data)
+        #    df.to_csv(f'{self.args.dir}{self.args.command}.csv')
+        if self.args.output == 'json':
             for index, d in enumerate(data):
                 data_file = open(f'{self.args.dir}{self.args.command}_{index}.json', 'w')
                 json.dump(data, data_file, ensure_ascii=False, indent=2)

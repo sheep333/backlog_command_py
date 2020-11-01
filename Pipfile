@@ -8,7 +8,6 @@ flake8 = "*"
 isort = "*"
 
 [packages]
-pandas = "*"
 pybacklogpy = "*"
 jinja2 = "*"
 markdown = "*"
