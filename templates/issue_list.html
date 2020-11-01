@@ -97,12 +97,12 @@
               </td>
               <td data-column-name="attachments" class="cell-file">
                 {% for attachment in issue.attachments %}
-                <a href="./attachment/{{ attachment.id }}">{{ attachment.name }}</a>
+                <a href="{{ attachment.name }}">{{ attachment.name }}</a>
                 {% endfor %}
               </td>
               <td data-column-name="sharedFiles" class="cell-file">
                 {% for file in issue.sharedFiles %}
-                <a href="./file/{{ file.id }}">{{ file.name }}</a>
+                <a href="{{ file.name }}">{{ file.name }}</a>
                 {% endfor %}
               </td>
             </tr>

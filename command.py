@@ -117,8 +117,8 @@ class Command:
             return txt
         filenames = re.findall(r'!\[image\]\[(.*)\]', txt)
         for filename in filenames:
-            file_link = f'[{filename}](./{filename})'
-            txt = re.sub(r'!\[image\]\[(.*)\]', file_link, txt)
+            file_image = f'<img src="{filename}" class="loom-internal-image">'
+            txt = re.sub(r'!\[image\]\[(.*)\]', file_image, txt, 1)
         return txt
 
     def get_users(self):
