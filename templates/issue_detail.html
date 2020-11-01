@@ -81,11 +81,7 @@
             <div class="ticket__properties-item -assigner">
               <div class="ticket__properties-label">担当者</div>
               <div class="ticket__properties-value">
-                <a href="" title="" data-bind="attr:{ title: assignerName, href:assignerLink}" class="user-icon-set">
-                  <span class="user-icon-set__user-icon">
-                    <img class="image image--circle -small" src="">
-                  </span>{{ issue.assignee.name }}
-                </a>
+                {{ issue.assignee.name }}
                 <a class="_week-trigger-text" data-bind="attr: {'href': '/find/PROJECT1?condition.assignerId=' + assignerId()}" href="/find/PROJECT1?condition.assignerId=-1">
                   <span data-bind="text: assigner"></span>
                 </a>
