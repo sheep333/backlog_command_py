@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="ja" class="">
-
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
@@ -12,20 +11,15 @@
   <link rel="stylesheet" type="text/css" media="all" href="../css/introjs-flattener.css">
   <title>{{ project.key }} 課題の一覧</title>
 </head>
-
 <body>
   <header id="project-header" class="content-header" aria-label="プロジェクトヘッダー">
     <div class="content-header__inner project-header">
       <div class="header-icon-set project-header__summary">
-        <div class="header-icon-set__icon"><a href="/projects/PROJECT1">
-
-            <img src="/SpaceImage.action" alt="project logo" class="header-icon-set__image">
-
-
-          </a></div>
+        <div class="header-icon-set__icon">
+          <img src="{{ project.icon}}" alt="project logo" class="header-icon-set__image">
+        </div>
         <h1 class="header-icon-set__text"><span class="header-icon-set__name">{{ project.name }}</span><span class="header-icon-set__key">{{ project.key }}</span></h1>
       </div>
-
       <div class="project-header__actions">
       </div><!-- End project-header__actions -->
     </div><!-- End content-header__inner -->
@@ -97,7 +91,6 @@
               <td data-column-name="updated" class="cell-updated">{{ issue.updated }}</td>
               <td data-column-name="createdUser" class="cell-user">
                 <div class="user-icon-set">
-                  <span class="user-icon-set__user-icon"><img class="image image--circle -small" src="/NulabAccountIcon.action?userId=325620&amp;name=large" alt=""></span>
                   <span class="user-icon-set__text">{{ issue.createdUser.name }}</span>
                 </div>
               </td>
@@ -119,5 +112,4 @@
     </div>
   </div>
 </body>
-
 </html>

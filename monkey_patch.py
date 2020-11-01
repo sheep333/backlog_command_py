@@ -53,13 +53,28 @@ class MySharedFile(SharedFile):
         return self.rs.get_file(path=path, url_param={})
 
 
+class MyUser(User):
+    def get_user_icon(self, user_id):
+        path = self.base_path + '/{user_id}/icon'.format(user_id=str(user_id))
+
+        response = self.rs.send_get_request(path=path, url_param={})
+        if not response.ok:
+            return '', response
+        # ユーザーアイコンだけ他と戻り値のパターンが違うので、個別対応
+        filename = response.url.split('/')[len(response.url.split('/')) - 1]
+        filepath = f'{self.rs.download_path}{filename}'
+        with open(filepath, mode='wb') as save_file:
+            save_file.write(response.content)
+        return filepath, response
+
+
 def changed_init(self, config, download_path='./output/'):
     self.old_init(config)
     self.rs = MyRequestSender(config, download_path)
 
 
 def apply_patch():
-    class_list = [Issue, IssueAttachment, IssueComment, IssueSharedFile, Project, User, Wiki, WikiAttachment, MySharedFile]
+    class_list = [Issue, IssueAttachment, IssueComment, IssueSharedFile, Project, MyUser, Wiki, WikiAttachment, MySharedFile]
     for backlog_class in class_list:
         old_init = backlog_class.__init__
         backlog_class.__init__ = changed_init
