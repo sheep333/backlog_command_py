@@ -15,7 +15,7 @@ python = 3.8
 
 - 雑な手順説明
   - pyenvをインストール
-  - `pyenv install  3.8.X`でpythonの3.8系をインストール
+  - `pyenv install  3.8.X`でpythonの3.8系をインストール
   - pyenvでインストールされるpythonのディレクトリにPATHを通す
   - `pip install pipenv`でpipenvをインストール
 
@@ -24,6 +24,7 @@ python = 3.8
 
 ```
 git clone https://github.com/sheep333/backlog_command_py.git
+
 pipenv install
 pipenv shell
 cp .env.sample .env
