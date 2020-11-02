@@ -131,48 +131,78 @@ class Command:
 
     def get_users(self):
         response = self.user_api.get_user_list()
-        return self._convert_res_to_dict(response)
+        if response.status_code == 200:
+            return self._convert_res_to_dict(response)
+        else:
+            raise EnvironmentError("APIの情報がうまく取得できませんでした...")
 
     def get_user_icon(self, user_id):
         filepath, response = self.user_api.get_user_icon(user_id=user_id)
-        logger.info(f'Saved user icon: {filepath}')
-        return filepath, response
+        if response.status_code == 200:
+            logger.info(f'Saved user icon: {filepath}')
+            return filepath, response
+        else:
+            raise EnvironmentError("APIの情報がうまく取得できませんでした...")
 
     def get_issues(self):
         response = self.issue_api.get_issue_list()
-        return self._convert_res_to_dict(response)
+        if response.status_code == 200:
+            return self._convert_res_to_dict(response)
+        else:
+            raise EnvironmentError("APIの情報がうまく取得できませんでした...")
 
     def get_project(self):
         response = self.project_api.get_project(project_id_or_key=self.args.project)
-        return self._convert_res_to_dict(response)
+        if response.status_code == 200:
+            return self._convert_res_to_dict(response)
+        else:
+            raise EnvironmentError("APIの情報がうまく取得できませんでした...")
 
     def get_projects(self):
         response = self.project_api.get_project_list()
-        return self._convert_res_to_dict(response)
+        if response.status_code == 200:
+            return self._convert_res_to_dict(response)
+        else:
+            raise EnvironmentError("APIの情報がうまく取得できませんでした...")
 
     def get_project_icon(self):
         filepath, response = self.project_api.get_project_icon(project_id_or_key=self.args.project)
-        logger.info(f'Saved project icon: {filepath}')
-        return filepath, response
+        if response.status_code == 200:
+            logger.info(f'Saved project icon: {filepath}')
+            return filepath, response
+        else:
+            raise EnvironmentError("APIの情報がうまく取得できませんでした...")
 
     def get_project_issues(self):
         response = self.issue_api.get_issue_list(project_id=self.args.project)
-        return self._convert_res_to_dict(response)
+        if response.status_code == 200:
+            return self._convert_res_to_dict(response)
+        else:
+            raise EnvironmentError("APIの情報がうまく取得できませんでした...")
 
     def get_project_users(self):
         response = self.project_api.get_project_user_list(project_id_or_key=self.args.project)
-        project_users = self._convert_res_to_dict(response)
-        return project_users
+        if response.status_code == 200:
+            project_users = self._convert_res_to_dict(response)
+            return project_users
+        else:
+            raise EnvironmentError("APIの情報がうまく取得できませんでした...")
 
     def get_issue_comments(self, issue_id):
         response = self.issue_comment_api.get_comment_list(issue_id_or_key=issue_id)
-        return self._convert_res_to_dict(response)
+        if response.status_code == 200:
+            return self._convert_res_to_dict(response)
+        else:
+            raise EnvironmentError("APIの情報がうまく取得できませんでした...")
 
     def get_wiki_page_list(self):
         response = self.wiki_api.get_wiki_page_list(project_id_or_key=self.args.project)
-        wikis_list = self._convert_res_to_dict(response)
         # 一覧に含まれるWikiにはcontentが含まれないため、改めて取得する
-        return [self._convert_res_to_dict(self.wiki_api.get_wiki_page(wiki['id'])) for wiki in wikis_list]
+        if response.status_code == 200:
+            wikis_list = self._convert_res_to_dict(response)
+            return [self._convert_res_to_dict(self.wiki_api.get_wiki_page(wiki['id'])) for wiki in wikis_list]
+        else:
+            raise EnvironmentError("APIの情報がうまく取得できませんでした...")
 
     def get_project_data(self):
         """
