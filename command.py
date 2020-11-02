@@ -34,7 +34,7 @@ class Command:
         if self.args.command != 'get_project_data':
             # get_project_data以外はそのままコマンド名を実行
             data = eval(f'self.{self.args.command}')()
-            self.parse.create_output_file(self.args.output, data)
+            self.parse.create_output_file(data, self.args)
         else:
             # get_project_dataは各種データをdictで取得
             project, issues, wikis, users = self.get_project_data()
@@ -90,18 +90,18 @@ class Command:
             ]
         )
         parser.add_argument('-p', '--project', help='プロジェクトID')
-        # parser.add_argument('-u', '--user', type=int, help='ユーザーID')
-        # parser.add_argument(
-        #     '-o', '--output',
-        #     help='アウトプットの形式',
-        #     default='json',
-        #     choices=['csv', 'json']
-        # )
-        # parser.add_argument(
-        #     '--dir',
-        #     help='データを出力するディレクトリ名',
-        #     default='./output/'
-        # )
+        parser.add_argument('-u', '--user', type=int, help='ユーザーID')
+        parser.add_argument(
+            '-o', '--output',
+            help='アウトプットの形式',
+            default='json',
+            choices=['csv', 'json']
+        )
+        parser.add_argument(
+            '--dir',
+            help='データを出力するディレクトリ名',
+            default='./output/'
+        )
         self.args = parser.parse_args()
 
     def _convert_res_to_dict(self, response):
