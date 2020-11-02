@@ -53,3 +53,6 @@ python exec.py xxxxx(コマンド名) -p yyyyy(project_id)
   - プロジェクトのWiki一覧のJSONファイル作成
 - get_project_data(-p必須)
   - プロジェクトの課題、WikiをHTMLファイルにして出力
+
+## エラー回避策
+- 通常`pipenv shell`したら`.env`ファイルを読み込むはず([公式ドキュメント](https://pipenv-ja.readthedocs.io/ja/translate-ja/advanced.html#automatic-loading-of-env)より)が、読み込まれないことがあるので、「APIの情報がうまく取得できませんでした...」というエラーが発生するようであればpipenv起動時に`PIPENV_DOTENV_LOCATION=.env pipenv shell`で環境ファイルを読み込ませてみてください。
