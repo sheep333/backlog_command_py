@@ -1,4 +1,5 @@
 from jinja2 import Environment, FileSystemLoader, Markup
+import json
 from markdown import markdown
 
 
@@ -25,3 +26,15 @@ class Parse:
         if data is None:
             data = ''
         return Markup(markdown(data))
+
+    def create_output_file(self, output, data):
+        """
+        各種ファイルの出力
+        """
+        # if self.args.output == 'csv':
+        #    df = pd.DataFrame(data)
+        #    df.to_csv(f'{self.args.dir}{self.args.command}.csv')
+        if output == 'json':
+            for index, d in enumerate(data):
+                data_file = open(f'{self.args.dir}{self.args.command}_{index}.json', 'w')
+                json.dump(data, data_file, ensure_ascii=False, indent=2)
