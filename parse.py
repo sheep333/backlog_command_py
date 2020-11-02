@@ -27,14 +27,14 @@ class Parse:
             data = ''
         return Markup(markdown(data))
 
-    def create_output_file(self, output, data):
+    def create_output_file(self, data, args):
         """
         各種ファイルの出力
         """
         # if self.args.output == 'csv':
         #    df = pd.DataFrame(data)
         #    df.to_csv(f'{self.args.dir}{self.args.command}.csv')
-        if output == 'json':
+        if args.output == 'json':
             for index, d in enumerate(data):
-                data_file = open(f'{self.args.dir}{self.args.command}_{index}.json', 'w')
+                data_file = open(f'{args.dir}{args.command}_{index}.json', 'w')
                 json.dump(data, data_file, ensure_ascii=False, indent=2)
