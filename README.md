@@ -28,7 +28,7 @@ git clone https://github.com/sheep333/backlog_command_py.git
 pipenv install
 pipenv shell
 cp .env.sample .env
-## .envに自分のSPACE_KEY(サブドメイン)とAPI_KEY(Backlogの個人設定から取得)を.envに記載
+## .envに自分のBacklogのSPACE_KEY(サブドメイン)とAPI_KEY(Backlogの個人設定から取得)を.envに記載
 ```
 
 ## コマンドの実行
