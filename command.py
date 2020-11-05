@@ -121,12 +121,11 @@ class Command:
         """
         テキスト中のimageの記法をimgタグに置換
         """
-        if txt is None:
-            return txt
         filenames = re.findall(r'!\[image\]\[(.*)\]', txt)
-        for filename in filenames:
-            file_image = f'<img src="{filename}" class="loom-internal-image">'
-            txt = re.sub(r'!\[image\]\[(.*)\]', file_image, txt, 1)
+        if filenames and txt is not None:
+            for filename in filenames:
+                file_image = f'<img src="{filename}" class="loom-internal-image">'
+                txt = re.sub(r'!\[image\]\[(.*)\]', file_image, txt, 1)
         return txt
 
     def get_users(self):
