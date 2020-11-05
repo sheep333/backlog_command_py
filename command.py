@@ -133,6 +133,7 @@ class Command:
         if response.status_code == 200:
             return self._convert_res_to_dict(response)
         else:
+            logger.error(response)
             raise EnvironmentError("APIの情報がうまく取得できませんでした...")
 
     def get_user_icon(self, user_id):
@@ -141,6 +142,7 @@ class Command:
             logger.info(f'Saved user icon: {filepath}')
             return filepath, response
         else:
+            logger.error(response)
             raise EnvironmentError("APIの情報がうまく取得できませんでした...")
 
     def get_issues(self):
@@ -148,6 +150,7 @@ class Command:
         if response.status_code == 200:
             return self._convert_res_to_dict(response)
         else:
+            logger.error(response)
             raise EnvironmentError("APIの情報がうまく取得できませんでした...")
 
     def get_project(self):
@@ -155,6 +158,7 @@ class Command:
         if response.status_code == 200:
             return self._convert_res_to_dict(response)
         else:
+            logger.error(response)
             raise EnvironmentError("APIの情報がうまく取得できませんでした...")
 
     def get_projects(self):
@@ -162,6 +166,7 @@ class Command:
         if response.status_code == 200:
             return self._convert_res_to_dict(response)
         else:
+            logger.error(response)
             raise EnvironmentError("APIの情報がうまく取得できませんでした...")
 
     def get_project_icon(self):
@@ -170,6 +175,7 @@ class Command:
             logger.info(f'Saved project icon: {filepath}')
             return filepath, response
         else:
+            logger.error(response)
             raise EnvironmentError("APIの情報がうまく取得できませんでした...")
 
     def get_project_issues(self):
@@ -177,6 +183,7 @@ class Command:
         if response.status_code == 200:
             return self._convert_res_to_dict(response)
         else:
+            logger.error(response)
             raise EnvironmentError("APIの情報がうまく取得できませんでした...")
 
     def get_project_users(self):
@@ -185,6 +192,7 @@ class Command:
             project_users = self._convert_res_to_dict(response)
             return project_users
         else:
+            logger.error(response)
             raise EnvironmentError("APIの情報がうまく取得できませんでした...")
 
     def get_issue_comments(self, issue_id):
@@ -192,6 +200,7 @@ class Command:
         if response.status_code == 200:
             return self._convert_res_to_dict(response)
         else:
+            logger.error(response)
             raise EnvironmentError("APIの情報がうまく取得できませんでした...")
 
     def get_wiki_page_list(self):
@@ -201,6 +210,7 @@ class Command:
             wikis_list = self._convert_res_to_dict(response)
             return [self._convert_res_to_dict(self.wiki_api.get_wiki_page(wiki['id'])) for wiki in wikis_list]
         else:
+            logger.error(response)
             raise EnvironmentError("APIの情報がうまく取得できませんでした...")
 
     def get_project_data(self):
@@ -224,32 +234,38 @@ class Command:
         # ユーザアイコンの取得用dict作成
         users_icon = {}
         for user in users:
+            logger.debug(f"ユーザID: {user['id']} の処理を開始")
             filepath, response = self.get_user_icon(user['id'])
             # FIXME: /outputの直接変換ではなく引数を判定して置換したい
             users_icon[user['id']] = filepath.replace('/output', '')
 
         # 課題とそのコメントのアイコン追加、マークダウンへの変換処理、添付ファイル取得
         for issue in issues:
+            logger.debug(f"課題ID: {issue['id']}の処理を開始")
             self._add_user_icon(issue, users_icon)
             description = self._convert_image_link(issue['description'])
             issue['description'] = self.parse.to_markdown(description)
 
             issue['comments'] = self.get_issue_comments(issue['id'])
             for comment in issue['comments']:
+                logger.debug(f"コメントID: {comment['id']}の処理を開始")
                 self._add_user_icon(comment, users_icon)
                 content = self._convert_image_link(comment['content'])
                 comment['content'] = self.parse.to_markdown(content)
             logger.info('Get comments')
 
             for attachment in issue['attachments']:
+                logger.debug(f"アタッチメントID: {attachment['id']}の処理を開始")
                 filepath, response = self.issue_attachment_api.get_issue_attachment(issue_id_or_key=issue['id'], attachment_id=attachment['id'])
                 logger.info(f'Saved issue attachment: {filepath}')
             for shared_file in issue['sharedFiles']:
+                logger.debug(f"共有ファイルID: {shared_file['id']}の処理を開始")
                 filepath, response = self.sharedfile_api.get_file(project_id_or_key=self.args.project, shared_file_id=shared_file['id'])
                 logger.info(f'Saved issue sharefile: {filepath}')
 
         # Wikiのマークダウンのアイコン追加、変換処理、添付ファイル取得
         for wiki in wikis:
+            logger.debug(f"WikiID: {wiki['id']}の処理を開始")
             self._add_user_icon(wiki, users_icon)
             content = self._convert_image_link(wiki['content'])
             wiki['content'] = self.parse.to_markdown(content)
