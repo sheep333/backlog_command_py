@@ -19,7 +19,10 @@ class MyRequestSender(RequestSender):
         super().__init__(config)
         self.download_path = download_path
 
-    def get_file(self, path: str, url_param):
+    def get_file(self, path: str, url_param, download_path=None):
+        if download_path is None:
+            download_path = self.download_path
+
         def get_file_name(content_disposition_header: str):
             fn = content_disposition_header[
                  content_disposition_header.find('filename') + len('filename'):len(content_disposition_header)]
@@ -41,20 +44,34 @@ class MyRequestSender(RequestSender):
             return '', response
         encode_filename = get_file_name(response.headers['Content-Disposition'])
         filename = urllib.parse.unquote(encode_filename)
-        with open(f'{self.download_path}{filename}', mode='wb') as save_file:
+        with open(f'{download_path}{filename}', mode='wb') as save_file:
             save_file.write(response.content)
-        return f'{self.download_path}{filename}', response
+        return f'{download_path}{filename}', response
 
 
 class MySharedFile(SharedFile):
     """
     共有ファイルの取得用パッチ
     """
-    def get_file(self, project_id_or_key, shared_file_id):
+    def get_file(self, project_id_or_key, shared_file_id, download_path=None):
         path = self.base_path + '/{project_id_or_key}/files/{shared_file_id}'\
             .format(project_id_or_key=project_id_or_key, shared_file_id=shared_file_id)
 
-        return self.rs.get_file(path=path, url_param={})
+        return self.rs.get_file(path=path, url_param={}, download_path=download_path)
+
+
+class MyIssueAttachment(IssueAttachment):
+    def get_issue_attachment(self, issue_id_or_key: str, attachment_id: int, download_path=None):
+        path = self.base_path + '/{issue_id_or_key}/attachments/{attachment_id}' \
+            .format(issue_id_or_key=issue_id_or_key, attachment_id=attachment_id)
+        return self.rs.get_file(path, {}, download_path=download_path)
+
+
+class MyWikiAttachment(WikiAttachment):
+    def get_wiki_page_attachment(self, wiki_id, attachment_id=None, download_path=None):
+        path = self.base_path + '/{wiki_id}/attachments/{attachment_id}'\
+            .format(wiki_id=str(wiki_id), attachment_id=attachment_id)
+        return self.rs.get_file(path=path, url_param={}, download_path=download_path)
 
 
 class MyUser(User):

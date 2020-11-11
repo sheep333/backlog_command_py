@@ -11,7 +11,7 @@ from pybacklogpy.Project import Project
 from pybacklogpy.Wiki import Wiki, WikiAttachment
 
 from parse import Parse
-from monkey_patch import MySharedFile, MyUser
+from monkey_patch import MySharedFile, MyUser, MyIssueAttachment, MyWikiAttachment
 
 SPACE_KEY = str(os.getenv('SPACE_KEY'))
 API_KEY = os.getenv('API_KEY')
@@ -63,13 +63,13 @@ class Command:
         FIXME: output先のディレクトリを変更
         """
         self.issue_api = Issue(config)
-        self.issue_attachment_api = IssueAttachment(config)
+        self.issue_attachment_api = MyIssueAttachment(config)
         self.issue_comment_api = IssueComment(config)
         self.project_api = Project(config)
         self.sharedfile_api = MySharedFile(config)
         self.user_api = MyUser(config)
         self.wiki_api = Wiki(config)
-        self.wiki_attachment_api = WikiAttachment(config)
+        self.wiki_attachment_api = MyWikiAttachment(config)
 
     def _command_parse(self):
         """
@@ -255,14 +255,23 @@ class Command:
                 comment['content'] = self.parse.to_markdown(content)
             logger.info('Get comments')
 
+            path = f"./issues/{issue['id']}/"
+            os.makedirs(path, exist_ok=True)
+
             for attachment in issue['attachments']:
                 logger.debug(f"アタッチメントID: {attachment['id']}の処理を開始")
                 filepath, response = self.issue_attachment_api.get_issue_attachment(issue_id_or_key=issue['id'], attachment_id=attachment['id'])
                 logger.info(f'Saved issue attachment: {filepath}')
+                attachment['path'] = filepath
             for shared_file in issue['sharedFiles']:
                 logger.debug(f"共有ファイルID: {shared_file['id']}の処理を開始")
-                filepath, response = self.sharedfile_api.get_file(project_id_or_key=self.args.project, shared_file_id=shared_file['id'])
+                filepath, response = self.sharedfile_api.get_file(
+                    project_id_or_key=self.args.project,
+                    shared_file_id=shared_file['id'],
+                    download_path=path
+                )
                 logger.info(f'Saved issue sharefile: {filepath}')
+                shared_file['path'] = filepath
 
         # Wikiのマークダウンのアイコン追加、変換処理、添付ファイル取得
         for wiki in wikis:
@@ -270,11 +279,25 @@ class Command:
             self._add_user_icon(wiki, users_icon)
             content = self._convert_image_link(wiki['content'])
             wiki['content'] = self.parse.to_markdown(content)
+
+            path = f"./wikis/{wiki['id']}/"
+            os.makedirs(path, exist_ok=True)
+
             for attachment in wiki['attachments']:
-                filepath, response = self.wiki_attachment_api.get_wiki_page_attachment(wiki_id=wiki['id'], attachment_id=attachment['id'])
+                filepath, response = self.wiki_attachment_api.get_wiki_page_attachment(
+                    wiki_id=wiki['id'],
+                    attachment_id=attachment['id'],
+                    download_path=path
+                )
                 logger.info(f'Saved wiki attachment: {filepath}')
+                attachment['path'] = filepath
             for shared_file in wiki['sharedFiles']:
-                filepath, response = self.sharedfile_api.get_file(project_id_or_key=self.args.project, shared_file_id=shared_file['id'])
+                filepath, response = self.sharedfile_api.get_file(
+                    project_id_or_key=self.args.project,
+                    shared_file_id=shared_file['id'],
+                    download_path=path
+                )
                 logger.info(f'Saved wiki sharefile: {filepath}')
+                shared_file['path'] = filepath
 
         return project, issues, wikis, users
