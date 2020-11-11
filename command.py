@@ -122,6 +122,7 @@ class Command:
         テキスト中のimageの記法をimgタグに置換
         """
         if txt is not None:
+            # FIXME:re.subだけで置換できるような気もする...
             filenames = re.findall(r'!\[image\]\[(.*)\]', txt)
             if filenames:
                 for filename in filenames:
