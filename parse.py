@@ -1,5 +1,6 @@
 from jinja2 import Environment, FileSystemLoader, Markup
 import json
+import re
 from markdown import markdown
 
 
@@ -25,7 +26,8 @@ class Parse:
         """
         if data is None:
             data = ''
-        return Markup(markdown(data))
+
+        return Markup(markdown(data, extensions=['fenced_code']))
 
     def create_output_file(self, data, args):
         """
