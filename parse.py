@@ -1,6 +1,5 @@
 from jinja2 import Environment, FileSystemLoader, Markup
 import json
-import re
 from markdown import markdown
 
 
