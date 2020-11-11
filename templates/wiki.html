@@ -42,7 +42,7 @@
             <ul class="upload-item-list -list-view _mg-t-10 is_visible" id="attachment-list">
               {% for attachment in wiki.attachments %}
               <li class="upload-item-list__item">
-                <a class="upload-item-list__name" href="./{{ attachment.name }}" target="_blank">{{attachment.name}}</a>
+                <a class="upload-item-list__name" href="../{{ attachment.path }}" target="_blank">{{attachment.name}}</a>
                 <span class="upload-item-list__info" style="color:gray">
                   ({{ attachment.size }} : {{ attachment.created }})
                 </span>
@@ -50,7 +50,7 @@
               {% endfor %}
               {% for file in wiki.sharedFiles %}
               <li class="upload-item-list__item">
-                <a class="upload-item-list__name" href="./{{ file.name }}" target="_blank">{{file.name}}</a>
+                <a class="upload-item-list__name" href="../{{ file.path }}" target="_blank">{{file.name}}</a>
                 <span class="upload-item-list__info" style="color:gray">
                   ({{ file.size }} : {{ file.created }})
                 </span>
@@ -65,7 +65,7 @@
     <div class="user-history">
       <div class="user-icon-set user-history__account">
         <a class="user-icon-set__user-icon -img-medium" href="./users/{{ wiki.createdUser.userId }}" title="{{ wiki.createdUser.name }}さんのプロフィール">
-          <img src="{{ wiki.createdUser.icon }}" alt="" class="image image--circle -medium">
+          <img src="../{{ wiki.createdUser.icon }}" alt="" class="image image--circle -medium">
         </a>
         <span class="user-icon-set__text">
           {{ wiki.createdUser.name }}によって {{ wiki.created }} に作成されました。
@@ -73,7 +73,7 @@
       </div>
       <div class="user-icon-set user-history__account">
         <a class="user-icon-set__user-icon -img-medium" href="./users/{{ wiki.updatedUser.userId }}" title="{{ wiki.updatedUser.name }}さんのプロフィール">
-          <img src="{{ wiki.updatedUser.icon }}" alt="" class="image image--circle -medium">
+          <img src="../{{ wiki.updatedUser.icon }}" alt="" class="image image--circle -medium">
         </a>
         <span class="user-icon-set__text">
           {{ wiki.updatedUser.name }}によって {{ wiki.updated }} に最終更新されました。

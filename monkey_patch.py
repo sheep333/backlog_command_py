@@ -78,7 +78,9 @@ class MyUser(User):
     """
     ユーザアイコンの取得用パッチ
     """
-    def get_user_icon(self, user_id):
+    def get_user_icon(self, user_id, download_path=None):
+        if download_path is None:
+            download_path = self.rs.download_path
         path = self.base_path + '/{user_id}/icon'.format(user_id=str(user_id))
 
         response = self.rs.send_get_request(path=path, url_param={})
@@ -86,7 +88,7 @@ class MyUser(User):
             return '', response
         # ユーザーアイコンだけ他と戻り値のパターンが違うので、個別対応
         filename = response.url.split('/')[len(response.url.split('/')) - 1]
-        filepath = f'{self.rs.download_path}{filename}'
+        filepath = f'{download_path}{filename}'
         with open(filepath, mode='wb') as save_file:
             save_file.write(response.content)
         return filepath, response

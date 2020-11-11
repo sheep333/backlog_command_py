@@ -6,9 +6,9 @@ import re
 
 # import pandas as pd
 from pybacklogpy.BacklogConfigure import BacklogComConfigure
-from pybacklogpy.Issue import Issue, IssueAttachment, IssueComment
+from pybacklogpy.Issue import Issue, IssueComment
 from pybacklogpy.Project import Project
-from pybacklogpy.Wiki import Wiki, WikiAttachment
+from pybacklogpy.Wiki import Wiki
 
 from parse import Parse
 from monkey_patch import MySharedFile, MyUser, MyIssueAttachment, MyWikiAttachment
@@ -117,7 +117,7 @@ class Command:
             obj['updatedUser']['icon'] = users_icon[obj['updatedUser']['id']]
         return
 
-    def _convert_image_link(self, txt):
+    def _convert_image_link(self, txt, path):
         """
         テキスト中のimageの記法をimgタグに置換
         """
@@ -125,7 +125,7 @@ class Command:
             filenames = re.findall(r'!\[image\]\[(.*)\]', txt)
             if filenames:
                 for filename in filenames:
-                    file_image = f'<img src="{filename}" class="loom-internal-image">'
+                    file_image = f'<img src="../{path}{filename}" class="loom-internal-image">'
                     txt = re.sub(r'!\[image\]\[(.*)\]', file_image, txt, 1)
         return txt
 
@@ -137,8 +137,8 @@ class Command:
             logger.error(self._convert_res_to_dict(response))
             raise EnvironmentError("APIの情報がうまく取得できませんでした...")
 
-    def get_user_icon(self, user_id):
-        filepath, response = self.user_api.get_user_icon(user_id=user_id)
+    def get_user_icon(self, user_id, download_path=None):
+        filepath, response = self.user_api.get_user_icon(user_id=user_id, download_path=download_path)
         if response.status_code == 200:
             logger.info(f'Saved user icon: {filepath}')
             return filepath, response
@@ -236,31 +236,37 @@ class Command:
         users_icon = {}
         for user in users:
             logger.debug(f"ユーザID: {user['id']} の処理を開始")
-            filepath, response = self.get_user_icon(user['id'])
-            # FIXME: /outputの直接変換ではなく引数を判定して置換したい
-            users_icon[user['id']] = filepath.replace('/output', '')
+            path = f"users/{user['id']}/"
+            os.makedirs(path, exist_ok=True)
+            filepath, response = self.get_user_icon(user['id'], download_path=path)
+            users_icon[user['id']] = filepath
 
         # 課題とそのコメントのアイコン追加、マークダウンへの変換処理、添付ファイル取得
         for issue in issues:
             logger.debug(f"課題ID: {issue['id']}の処理を開始")
             self._add_user_icon(issue, users_icon)
-            description = self._convert_image_link(issue['description'])
+
+            path = f"issues/{issue['id']}/"
+            os.makedirs(path, exist_ok=True)
+
+            description = self._convert_image_link(issue['description'], path)
             issue['description'] = self.parse.to_markdown(description)
 
             issue['comments'] = self.get_issue_comments(issue['id'])
             for comment in issue['comments']:
                 logger.debug(f"コメントID: {comment['id']}の処理を開始")
                 self._add_user_icon(comment, users_icon)
-                content = self._convert_image_link(comment['content'])
+                content = self._convert_image_link(comment['content'], path)
                 comment['content'] = self.parse.to_markdown(content)
             logger.info('Get comments')
 
-            path = f"./issues/{issue['id']}/"
-            os.makedirs(path, exist_ok=True)
-
             for attachment in issue['attachments']:
                 logger.debug(f"アタッチメントID: {attachment['id']}の処理を開始")
-                filepath, response = self.issue_attachment_api.get_issue_attachment(issue_id_or_key=issue['id'], attachment_id=attachment['id'])
+                filepath, response = self.issue_attachment_api.get_issue_attachment(
+                    issue_id_or_key=issue['id'],
+                    attachment_id=attachment['id'],
+                    download_path=path
+                )
                 logger.info(f'Saved issue attachment: {filepath}')
                 attachment['path'] = filepath
             for shared_file in issue['sharedFiles']:
@@ -277,11 +283,12 @@ class Command:
         for wiki in wikis:
             logger.debug(f"WikiID: {wiki['id']}の処理を開始")
             self._add_user_icon(wiki, users_icon)
-            content = self._convert_image_link(wiki['content'])
-            wiki['content'] = self.parse.to_markdown(content)
 
-            path = f"./wikis/{wiki['id']}/"
+            path = f"wikis/{wiki['id']}/"
             os.makedirs(path, exist_ok=True)
+
+            content = self._convert_image_link(wiki['content'], path)
+            wiki['content'] = self.parse.to_markdown(content)
 
             for attachment in wiki['attachments']:
                 filepath, response = self.wiki_attachment_api.get_wiki_page_attachment(

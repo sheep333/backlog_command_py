@@ -55,7 +55,7 @@
             <div class="ticket__article-header">
               <div class="user-icon-set -collapsed-trigger">
                 <span class="user-icon-set__user-icon">
-                  <img class="image image--circle -x-large" src="{{ issue.createdUser.icon }}"></a>
+                  <img class="image image--circle -x-large" src="../{{ issue.createdUser.icon }}"></a>
                 </span>
                 <span class="user-icon-set__text -collapsed-trigger">
                   <span class="user-icon-set__name"></span><br>
@@ -157,21 +157,21 @@
           <!-- ko with: attachmentTabViewModel -->
           {% for attachment in issue.attachments %}
           <li>
-            <a class="upload-item-list__name js_imageAttachment" href="./{{ attachment.name }}">{{attachment.name}}</a>
+            <a class="upload-item-list__name js_imageAttachment" href="../{{ attachment.path }}">{{attachment.name}}</a>
           </li>
           {% endfor %}
           <!-- /ko -->
           <!-- ko with: sharedFileTabViewModel -->
           {% for file in issue.sharedfiles %}
           <li>
-            <a class="upload-item-list__name js_imageAttachment" href="./{{ file.name }}">{{file.name}}</a>
+            <a class="upload-item-list__name js_imageAttachment" href="../{{ file.path }}">{{file.name}}</a>
           </li>
           {% endfor %}
         </ul>
       </div>
     </div>
     <div id="commentArea">
-      <div id="comments" class="comment-section _mg-t-30" data-bind="with: commentList">
+      <div id="comments" class="comment-section _mg-t-30">
         <div class="comment-list-heading">
           <h3 class="title title--fourth comment-list-heading__title">
             コメント <span class="title-group__number">(
@@ -189,7 +189,7 @@
               <a class="page-section-anchor -double-header" data-bind="attr: {name: 'comment-' + id}" name="comment-47354086">&nbsp;</a>
               <div class="comment-item__header">
                 <div class="user-icon-set -collapsed-trigger">
-                  <img src="{{ comment.createdUser.icon }}" class="image image--circle -x-large" alt="" data-bind="attr: {src: Backlog.getUserIconUrl(icon)}">
+                  <img src="../{{ comment.createdUser.icon }}" class="image image--circle -x-large" alt="" data-bind="attr: {src: Backlog.getUserIconUrl(icon)}">
                   <span class="user-icon-set__text comment-item__user-text">
                     <span class="user-icon-set__name" data-bind="text: createdUser.name">{{ comment.createdUser.name }}</span><br>
                     <span class="user-icon-set__sub-line">
@@ -201,17 +201,17 @@
                 </div>
               </div><!-- End .comment-item__header -->
               <div class="comment-item__container js_comment-container">
-                <ul class="comment-changelog" data-bind="foreach: changelog">
+                <ul class="comment-changelog">
                   {% for log in comment.changeLog %}
-                  <li class="comment-changelog__item" data-bind="css: {commit: commit}">
-                    <span class="comment-changelog__label" data-bind="text: field">{{ log.field }}</span>:
+                  <li class="comment-changelog__item">
+                    <span class="comment-changelog__label">{{ log.field }}</span>:
                     <span data-bind="text: originalValue">{{ log.originalValue }}</span>
                     <span class="comment-changelog__arrow"></span>
                     <span data-bind="text: newValue">{{ log.newValue }}</span>
                   </li>
                   {% endfor %}
                 </ul>
-                <div class="loom comment-content" data-bind="embed: content, highlight: {'global-search-keyword-highlight': $root.query, 'star-comment-highlight': highlightWords}, visible: !$parent.isEdit(id)">
+                <div class="loom comment-content">
                   <div>
                     <div class="markdown-body">
                       {{ comment.content }}
