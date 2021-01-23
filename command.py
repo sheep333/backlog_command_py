@@ -113,9 +113,9 @@ class Command:
         return json.loads(response.content.decode('utf-8'))
 
     def _add_user_icon(self, obj, users_icon):
-        if 'createdUser' in obj:
+        if 'createdUser' in obj and obj['createdUser']['id'] in users_icon:
             obj['createdUser']['icon'] = users_icon[obj['createdUser']['id']]
-        if 'updatedUser' in obj:
+        if 'updatedUser' in obj and obj['updatedUser']['id'] in users_icon:
             obj['updatedUser']['icon'] = users_icon[obj['updatedUser']['id']]
         return
 
