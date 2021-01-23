@@ -16,7 +16,7 @@ from monkey_patch import MySharedFile, MyUser, MyIssueAttachment, MyWikiAttachme
 
 SPACE_KEY = str(os.getenv('SPACE_KEY'))
 API_KEY = os.getenv('API_KEY')
-COUNT_PER_API = 2
+COUNT_PER_API = 100
 
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.StreamHandler())
