@@ -94,6 +94,63 @@ class MyUser(User):
         return filepath, response
 
 
+class MyIssue(Issue):
+    """
+    課題にcountを追加するためのパッチ
+    """
+    def get_issue_list(self, **kwargs):
+        path = self.base_path
+        payloads = {}
+        list_type_param = [
+            'project_id',
+            'issue_type_id',
+            'category_id',
+            'version_id',
+            'milestone_id',
+            'status_id',
+            'priority_id',
+            'assignee_id',
+            'created_user_id',
+            'resolution_id',
+            'parent_issue_id',
+        ]
+        for k, v in kwargs.items():
+            if k == 'order' and k not in {'desc', 'asc'}:
+                raise ValueError('order は desc または asc のみが使用できます')
+            if k == 'count' and not 1 <= v <= 100:
+                raise ValueError('count(取得上限)は1-100の範囲で指定してください')
+            if k == 'custom_field_text':
+                for field_id in v:
+                    payloads['customField_{field_id}'.format(field_id=field_id)] = v[field_id]
+            if k == 'custom_field_num':
+                for field_id in v:
+                    if v[field_id]['min']:
+                        payloads['customField_{field_id}_min'.format(field_id=field_id)] = v[field_id]['min']
+                    if v[field_id]['max']:
+                        payloads['customField_{field_id}_max'.format(field_id=field_id)] = v[field_id]['max']
+            if k == 'custom_field_date':
+                for field_id in v:
+                    if v[field_id]['min']:
+                        payloads['customField_{field_id}_min'.format(field_id=field_id)] = v[field_id][
+                            'min']
+                    if v[field_id]['max']:
+                        payloads['customField_{field_id}_max'.format(field_id=field_id)] = v[field_id]['max']
+            if k == 'custom_field_list':
+                for field_id in v:
+                    payloads['customField_{field_id}[]'.format(field_id=field_id)] = v[field_id]
+
+            # keyをキャメルケースに変換してバックログのキーと揃える
+            backlog_param = re.sub("_(.)", lambda m: m.group(1).upper(), k)
+            if k == 'id_':
+                backlog_param = ['id[]']
+            # リスト型のパラメータの場合はキーに括弧を追加する
+            if k in list_type_param:
+                backlog_param += '[]'
+            payloads[backlog_param] = v
+
+        return self.rs.send_get_request(path=path, url_param=payloads)
+
+
 def changed_init(self, config, download_path='./output/'):
     self.old_init(config)
     self.rs = MyRequestSender(config, download_path)

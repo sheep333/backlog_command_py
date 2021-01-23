@@ -12,7 +12,7 @@ from pybacklogpy.Project import Project
 from pybacklogpy.Wiki import Wiki
 
 from parse import Parse
-from monkey_patch import MySharedFile, MyUser, MyIssueAttachment, MyWikiAttachment
+from monkey_patch import MySharedFile, MyUser, MyIssueAttachment, MyWikiAttachment, MyIssue
 
 SPACE_KEY = str(os.getenv('SPACE_KEY'))
 API_KEY = os.getenv('API_KEY')
@@ -64,7 +64,7 @@ class Command:
         BacklogのAPIを初期化
         FIXME: output先のディレクトリを変更
         """
-        self.issue_api = Issue(config)
+        self.issue_api = MyIssue(config)
         self.issue_attachment_api = MyIssueAttachment(config)
         self.issue_comment_api = IssueComment(config)
         self.project_api = Project(config)
@@ -203,7 +203,7 @@ class Command:
             )
             if response.status_code == 200:
                 res = self._convert_res_to_dict(response)
-                issues.append(res[0])
+                issues += res
             else:
                 logger.error(self._convert_res_to_dict(response))
                 raise EnvironmentError("APIの情報がうまく取得できませんでした...")
