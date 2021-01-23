@@ -22,6 +22,7 @@ class Command:
             data = eval(f'self.backlog.{self.args.command}()')
             self.parse.create_output_file(data, self.args)
         else:
+            # TODO:あとでBacklogクラスに移行
             # get_project_dataは各種データをdictで取得
             project, issues, wikis, users = self.backlog.get_project_data()
 
