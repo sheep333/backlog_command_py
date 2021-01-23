@@ -219,6 +219,12 @@ class Command:
         """
         APIデータの取得と整形
         """
+        if not SPACE_KEY or not API_KEY:
+            raise AttributeError("スペース情報かAPI KEYが取得できませんでした。")
+
+        if not self.args.project:
+            raise AttributeError("プロジェクトIDを引数に指定してください。")
+
         project = self.get_project()
         logger.info('Get project data')
         issues = self.get_project_issues()
@@ -239,8 +245,11 @@ class Command:
             logger.debug(f"ユーザID: {user['id']} の処理を開始")
             path = f"users/{user['id']}/"
             os.makedirs(path, exist_ok=True)
-            filepath, response = self.get_user_icon(user['id'], download_path=path)
-            users_icon[user['id']] = filepath
+            try:
+                filepath, response = self.get_user_icon(user['id'], download_path=path)
+                users_icon[user['id']] = filepath
+            except Exception as e:
+                logger.warning(f"ユーザID:{user['id']}のユーザアイコンが取得できませんでした。エラーメッセージ:{e}")
 
         # 課題とそのコメントのアイコン追加、マークダウンへの変換処理、添付ファイル取得
         for issue in issues:
@@ -262,23 +271,30 @@ class Command:
             logger.info('Get comments')
 
             for attachment in issue['attachments']:
-                logger.debug(f"アタッチメントID: {attachment['id']}の処理を開始")
-                filepath, response = self.issue_attachment_api.get_issue_attachment(
-                    issue_id_or_key=issue['id'],
-                    attachment_id=attachment['id'],
-                    download_path=path
-                )
-                logger.info(f'Saved issue attachment: {filepath}')
-                attachment['path'] = filepath
+                try:
+                    logger.debug(f"アタッチメントID: {attachment['id']}の処理を開始")
+                    filepath, response = self.issue_attachment_api.get_issue_attachment(
+                        issue_id_or_key=issue['id'],
+                        attachment_id=attachment['id'],
+                        download_path=path
+                    )
+                    logger.info(f'Saved issue attachment: {filepath}')
+                    attachment['path'] = filepath
+                except Exception as e:
+                    logger.error(f"アタッチメントID:{attachment['id']}が取得できませんでした。エラーメッセージ:{e}")
+
             for shared_file in issue['sharedFiles']:
                 logger.debug(f"共有ファイルID: {shared_file['id']}の処理を開始")
-                filepath, response = self.sharedfile_api.get_file(
-                    project_id_or_key=self.args.project,
-                    shared_file_id=shared_file['id'],
-                    download_path=path
-                )
-                logger.info(f'Saved issue sharefile: {filepath}')
-                shared_file['path'] = filepath
+                try:
+                    filepath, response = self.sharedfile_api.get_file(
+                        project_id_or_key=self.args.project,
+                        shared_file_id=shared_file['id'],
+                        download_path=path
+                    )
+                    logger.info(f'Saved issue sharefile: {filepath}')
+                    shared_file['path'] = filepath
+                except Exception as e:
+                    logger.error(f"共有ファイルID:{shared_file['id']}が取得できませんでした。エラーメッセージ:{e}")
 
         # Wikiのマークダウンのアイコン追加、変換処理、添付ファイル取得
         for wiki in wikis:
@@ -292,20 +308,27 @@ class Command:
             wiki['content'] = self.parse.to_markdown(content)
 
             for attachment in wiki['attachments']:
-                filepath, response = self.wiki_attachment_api.get_wiki_page_attachment(
-                    wiki_id=wiki['id'],
-                    attachment_id=attachment['id'],
-                    download_path=path
-                )
-                logger.info(f'Saved wiki attachment: {filepath}')
-                attachment['path'] = filepath
+                try:
+                    filepath, response = self.wiki_attachment_api.get_wiki_page_attachment(
+                        wiki_id=wiki['id'],
+                        attachment_id=attachment['id'],
+                        download_path=path
+                    )
+                    logger.info(f'Saved wiki attachment: {filepath}')
+                    attachment['path'] = filepath
+                except Exception as e:
+                    logger.error(f"アタッチメントID:{attachment['id']}が取得できませんでした。エラーメッセージ:{e}")
+
             for shared_file in wiki['sharedFiles']:
-                filepath, response = self.sharedfile_api.get_file(
-                    project_id_or_key=self.args.project,
-                    shared_file_id=shared_file['id'],
-                    download_path=path
-                )
-                logger.info(f'Saved wiki sharefile: {filepath}')
-                shared_file['path'] = filepath
+                try:
+                    filepath, response = self.sharedfile_api.get_file(
+                        project_id_or_key=self.args.project,
+                        shared_file_id=shared_file['id'],
+                        download_path=path
+                    )
+                    logger.info(f'Saved wiki sharefile: {filepath}')
+                    shared_file['path'] = filepath
+                except Exception as e:
+                    logger.error(f"共有ファイルID:{shared_file['id']}が取得できませんでした。エラーメッセージ:{e}")
 
         return project, issues, wikis, users
