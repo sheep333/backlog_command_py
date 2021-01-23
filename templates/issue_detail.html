@@ -6,10 +6,10 @@
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   <meta name="viewport" content="width=1080">
   <meta name="referrer" content="no-referrer">
-  <link rel="stylesheet" type="text/css" media="all" href="../css/tooltipster.bundle.min.css">
-  <link rel="stylesheet" type="text/css" media="all" href="../css/Issue.css">
-  <link rel="stylesheet" type="text/css" media="all" href="../css/introjs.css">
-  <link rel="stylesheet" type="text/css" media="all" href="../css/introjs-flattener.css">
+  <link rel="stylesheet" type="text/css" media="all" href="./css/tooltipster.bundle.min.css">
+  <link rel="stylesheet" type="text/css" media="all" href="./css/Issue.css">
+  <link rel="stylesheet" type="text/css" media="all" href="./css/introjs.css">
+  <link rel="stylesheet" type="text/css" media="all" href="./css/introjs-flattener.css">
   <title>{{ project.key }} 課題の詳細</title>
 </head>
 
@@ -27,10 +27,10 @@
   <div class="content-main -with-head-line-pager -with-foot-space">
     <div id="issueArea">
       <div class="ticket js_ticket-collapsed">
-        <div class="ticket__header" data-bind="with: issueDetail">
+        <div class="ticket__header">
           <div class="ticket__key -has-button">
-            <span class="pill pill--issue-type-7" data-bind="css:issueTypeStyle, text: issueType">{{ issue.issueType.name }}</span>
-            <span class="ticket__key-number" data-bind="text: key">{{ issue.issueKey }}</span>
+            <span class="pill pill--issue-type-7">{{ issue.issueType.name }}</span>
+            <span class="ticket__key-number">{{ issue.issueKey }}</span>
           </div>
           <div class="ticket__date">
             <span class="ticket__date-item">
@@ -42,16 +42,16 @@
                 <use xlink:href="/images/svg/sprite.symbol.svg#icon_fire"></use>
               </svg></span>
             </span>
-            <span data-bind="text: status, css:statusLabelClass" class="status-label status-label--1">{{ issue.status.name }}</span>
+            <span class="status-label status-label--1">{{ issue.status.name }}</span>
           </div>
         </div><!-- End ticket__header -->
         <div class="ticket__title-group title-group -ticket">
-          <h2 id="summary" class="ticket__title title-group__title -three-actions" data-bind="with: issueDetail">
-            <span class="title-group__title-text" data-bind="text: summary, highlight:{'global-search-keyword-highlight': $root.query}">{{ issue.summary }}</span>
+          <h2 id="summary" class="ticket__title title-group__title -three-actions">
+            <span class="title-group__title-text">{{ issue.summary }}</span>
           </h2>
         </div>
-        <div id="issuecard" class="card card--default ticket__content -has-see-all" data-bind="with: issueDetail">
-          <div class="ticket__article" data-bind="highlight:{'star-comment-highlight': {words: highlightWords, exclude: 'star'}}">
+        <div id="issuecard" class="card card--default ticket__content -has-see-all">
+          <div class="ticket__article">
             <div class="ticket__article-header">
               <div class="user-icon-set -collapsed-trigger">
                 <span class="user-icon-set__user-icon">
@@ -60,12 +60,12 @@
                 <span class="user-icon-set__text -collapsed-trigger">
                   <span class="user-icon-set__name"></span><br>
                   <span class="user-icon-set__sub-line"><span>登録日</span>{{ issue.created }}
-                    <span class="ticket__collapsed-summary-separator">/</span><span class="ticket__collapsed-summary" data-bind="text: pureDescription">{{ issue.summary }}</span>
+                    <span class="ticket__collapsed-summary-separator">/</span><span class="ticket__collapsed-summary">{{ issue.summary }}</span>
                   </span>
                 </span>
               </div>
             </div><!-- END ticket__article-header -->
-            <div class="ticket__description loom" id="issueDescription" data-bind="embed: description, highlight:{'global-search-keyword-highlight': $root.query}, checklist: description">
+            <div class="ticket__description loom" id="issueDescription">
               <div class="markdown-body">
                 <p>{{ issue.description }}</p>
               </div>
@@ -75,71 +75,71 @@
             <div class="ticket__properties-item -priority">
               <div class="ticket__properties-label">優先度</div>
               <div class="ticket__properties-value">
-                <div data-bind="visible:false">{{ issue.priority.name }}</div>
+                <div>{{ issue.priority.name }}</div>
               </div>
             </div>
             <div class="ticket__properties-item -assigner">
               <div class="ticket__properties-label">担当者</div>
               <div class="ticket__properties-value">
                 {{ issue.assignee.name }}
-                <a class="_week-trigger-text" data-bind="attr: {'href': '/find/PROJECT1?condition.assignerId=' + assignerId()}" href="/find/PROJECT1?condition.assignerId=-1">
-                  <span data-bind="text: assigner"></span>
+                <a class="_week-trigger-text" href="/find/PROJECT1?condition.assignerId=-1">
+                  <span></span>
                 </a>
               </div>
             </div>
             <div class="ticket__properties-item -category">
               <div class="ticket__properties-label">カテゴリー</div>
               <div class="ticket__properties-value">
-                <div data-bind="visible:false">
+                <div>
                 </div>
                 {% for category in issue.category %}
-                <div data-bind="foreach: components, visible:true" style="">{{ category.name }},</div>
+                <div style="">{{ category.name }},</div>
                 {% endfor %}
               </div>
             </div>
             <div class="ticket__properties-item -milestones">
               <div class="ticket__properties-label">マイルストーン</div>
               <div class="ticket__properties-value _week-trigger-text">
-                <div data-bind="visible:false">
+                <div>
                 </div>
                 {% for term in issue.milestone %}
-                <div data-bind="foreach: milestones, visible:true" style="">{{ term.name }}</div>
+                <div style="">{{ term.name }}</div>
                 {% endfor %}
               </div>
             </div>
           </div><!-- ticket__properties 01 -->
-          <div data-bind="folding:{cookieKey:'ticket-properties', cookieSubKey:'128661'}">
+          <div>
             <div class="ticket__properties-collapsed js_folding-target" style="">
-              <div class="ticket__properties" data-bind="highlight:{'global-search-keyword-highlight': $root.query}">
+              <div class="ticket__properties">
                 <div class="ticket__properties-item -versions">
                   <div class="ticket__properties-label">発生バージョン</div>
                   <div class="ticket__properties-value _week-trigger-text">
-                    <div data-bind="visible:false">
+                    <div>
                     </div>
                     {% for version in issue.versions %}
-                    <div data-bind="foreach: versions, visible:true" style="">{{ version.name }}</div>
+                    <div style="">{{ version.name }}</div>
                     {% endfor %}
                   </div>
                 </div>
                 <div class="ticket__properties-item"></div>
                 <div class="ticket__properties-item -estimated-hours">
                   <div class="ticket__properties-label">予定時間</div>
-                  <div class="ticket__properties-value" data-bind="text: estimatedHours">{{ issue.estimatedHours }}</div>
+                  <div class="ticket__properties-value">{{ issue.estimatedHours }}</div>
                 </div>
                 <div class="ticket__properties-item -actual-hours">
                   <div class="ticket__properties-label">実績時間</div>
-                  <div class="ticket__properties-value" data-bind="text: actualHours">{{ issue.actualHours }}</div>
+                  <div class="ticket__properties-value">{{ issue.actualHours }}</div>
                 </div>
                 <div class="ticket__properties-item -resolution">
                   <div class="ticket__properties-label">完了理由</div>
-                  <div class="ticket__properties-value" data-bind="text: resolution">{{ issue.resolution.name }}</div>
+                  <div class="ticket__properties-value">{{ issue.resolution.name }}</div>
                 </div>
               </div>
               <div class="ticket__properties -one-col">
                 {% for field in issue.customFields %}
                 <div class="ticket__properties-item -custom-field">
-                  <div class="ticket__properties-label" data-bind="text:field">{{ field.name }}</div>
-                  <div class="ticket__properties-value loom" data-bind="html:value, highlight:{'global-search-keyword-highlight': {words: $root.query, forceUpdateObserver: value}}">
+                  <div class="ticket__properties-label">{{ field.name }}</div>
+                  <div class="ticket__properties-value loom">
                     <div class="markdown-body">
                       <p>{{ field.value }}</p>
                     </div>
@@ -181,21 +181,21 @@
           <div class="comment-list-heading__view-options">
           </div>
         </div>
-        <div class="comment-list" data-bind="notifyRead: comments, css:{'is_not-yet-comment':numComment() == 0}">
+        <div class="comment-list">
           <!-- ko template: { name: displayMode, foreach: comments, as: 'comment'} -->
           {% for comment in issue.comments %}
           <div class="comment-item is_first">
             <div class="comment-item__inner">
-              <a class="page-section-anchor -double-header" data-bind="attr: {name: 'comment-' + id}" name="comment-47354086">&nbsp;</a>
+              <a class="page-section-anchor -double-header" name="comment-47354086">&nbsp;</a>
               <div class="comment-item__header">
                 <div class="user-icon-set -collapsed-trigger">
-                  <img src="../{{ comment.createdUser.icon }}" class="image image--circle -x-large" alt="" data-bind="attr: {src: Backlog.getUserIconUrl(icon)}">
+                  <img src="../{{ comment.createdUser.icon }}" class="image image--circle -x-large" alt="">
                   <span class="user-icon-set__text comment-item__user-text">
-                    <span class="user-icon-set__name" data-bind="text: createdUser.name">{{ comment.createdUser.name }}</span><br>
+                    <span class="user-icon-set__name">{{ comment.createdUser.name }}</span><br>
                     <span class="user-icon-set__sub-line">
                       <a href="" class="user-icon-set__sub-line-anchor">{{ comment.created }}</a>
                       <span class="comment-item__collapsed-summary-separator">/</span>
-                      <span class="comment-item__collapsed-summary" data-bind="collapseSummary: $data">{{ comment.summary }}</span>
+                      <span class="comment-item__collapsed-summary">{{ comment.summary }}</span>
                     </span>
                   </span>
                 </div>
@@ -205,9 +205,9 @@
                   {% for log in comment.changeLog %}
                   <li class="comment-changelog__item">
                     <span class="comment-changelog__label">{{ log.field }}</span>:
-                    <span data-bind="text: originalValue">{{ log.originalValue }}</span>
+                    <span>{{ log.originalValue }}</span>
                     <span class="comment-changelog__arrow"></span>
-                    <span data-bind="text: newValue">{{ log.newValue }}</span>
+                    <span>{{ log.newValue }}</span>
                   </li>
                   {% endfor %}
                 </ul>

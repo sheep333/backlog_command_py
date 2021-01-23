@@ -6,6 +6,5 @@ __pycache__
 
 tmp/
 
-issues/*
-users/*
-wikis/*
+output/*
+!output/css
