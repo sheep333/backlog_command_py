@@ -115,7 +115,7 @@ class MyIssue(Issue):
             'parent_issue_id',
         ]
         for k, v in kwargs.items():
-            if k == 'order' and k not in {'desc', 'asc'}:
+            if k == 'order' and v not in {'desc', 'asc'}:
                 raise ValueError('order は desc または asc のみが使用できます')
             if k == 'count' and not 1 <= v <= 100:
                 raise ValueError('count(取得上限)は1-100の範囲で指定してください')
