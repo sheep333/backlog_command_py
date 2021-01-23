@@ -2,6 +2,7 @@ import argparse
 import json
 import os
 import logging
+import math
 import re
 
 # import pandas as pd
@@ -15,6 +16,7 @@ from monkey_patch import MySharedFile, MyUser, MyIssueAttachment, MyWikiAttachme
 
 SPACE_KEY = str(os.getenv('SPACE_KEY'))
 API_KEY = os.getenv('API_KEY')
+COUNT_PER_API = 100
 
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.StreamHandler())
@@ -181,12 +183,31 @@ class Command:
             raise EnvironmentError("APIの情報がうまく取得できませんでした...")
 
     def get_project_issues(self):
-        response = self.issue_api.get_issue_list(project_id=self.args.project)
-        if response.status_code == 200:
-            return self._convert_res_to_dict(response)
+        count_response = self.issue_api.count_issue(
+            project_id=self.args.project
+        )
+        if count_response.status_code == 200:
+            count = self._convert_res_to_dict(count_response)
+            # file数分ループ
+            file_count = math.ceil(count["count"] / COUNT_PER_API)
         else:
-            logger.error(self._convert_res_to_dict(response))
+            logger.error(self._convert_res_to_dict(count_response))
             raise EnvironmentError("APIの情報がうまく取得できませんでした...")
+
+        issues = []
+        for i in range(file_count):
+            response = self.issue_api.get_issue_list(
+                project_id=self.args.project,
+                count=COUNT_PER_API,
+                offset=i * COUNT_PER_API
+            )
+            if response.status_code == 200:
+                res = self._convert_res_to_dict(response)
+                issues.append(res[0])
+            else:
+                logger.error(self._convert_res_to_dict(response))
+                raise EnvironmentError("APIの情報がうまく取得できませんでした...")
+        return issues
 
     def get_project_users(self):
         response = self.project_api.get_project_user_list(project_id_or_key=self.args.project)
@@ -198,7 +219,10 @@ class Command:
             raise EnvironmentError("APIの情報がうまく取得できませんでした...")
 
     def get_issue_comments(self, issue_id):
-        response = self.issue_comment_api.get_comment_list(issue_id_or_key=issue_id)
+        response = self.issue_comment_api.get_comment_list(
+            issue_id_or_key=issue_id,
+            count=COUNT_PER_API,
+        )
         if response.status_code == 200:
             return self._convert_res_to_dict(response)
         else:
@@ -215,42 +239,7 @@ class Command:
             logger.error(self._convert_res_to_dict(response))
             raise EnvironmentError("APIの情報がうまく取得できませんでした...")
 
-    def get_project_data(self):
-        """
-        APIデータの取得と整形
-        """
-        if not SPACE_KEY or not API_KEY:
-            raise AttributeError("スペース情報かAPI KEYが取得できませんでした。")
-
-        if not self.args.project:
-            raise AttributeError("プロジェクトIDを引数に指定してください。")
-
-        project = self.get_project()
-        logger.info('Get project data')
-        issues = self.get_project_issues()
-        logger.info('Get project issues')
-        wikis = self.get_wiki_page_list()
-        logger.info('Get project wiki')
-        users = self.get_project_users()
-        logger.info('Get project users')
-
-        # プロジェクトデータにアイコンを追加
-        filepath, response = self.get_project_icon()
-        # FIXME: /outputの直接変換ではなく引数を判定して置換したい
-        project['icon'] = filepath.replace('/output', '')
-
-        # ユーザアイコンの取得用dict作成
-        users_icon = {}
-        for user in users:
-            logger.debug(f"ユーザID: {user['id']} の処理を開始")
-            path = f"users/{user['id']}/"
-            os.makedirs(path, exist_ok=True)
-            try:
-                filepath, response = self.get_user_icon(user['id'], download_path=path)
-                users_icon[user['id']] = filepath
-            except Exception as e:
-                logger.warning(f"ユーザID:{user['id']}のユーザアイコンが取得できませんでした。エラーメッセージ:{e}")
-
+    def create_issue_template_data(self, issues, users_icon):
         # 課題とそのコメントのアイコン追加、マークダウンへの変換処理、添付ファイル取得
         for issue in issues:
             logger.debug(f"課題ID: {issue['id']}の処理を開始")
@@ -295,7 +284,9 @@ class Command:
                     shared_file['path'] = filepath
                 except Exception as e:
                     logger.error(f"共有ファイルID:{shared_file['id']}が取得できませんでした。エラーメッセージ:{e}")
+        return issues
 
+    def create_wiki_template_data(self, wikis, users_icon):
         # Wikiのマークダウンのアイコン追加、変換処理、添付ファイル取得
         for wiki in wikis:
             logger.debug(f"WikiID: {wiki['id']}の処理を開始")
@@ -330,5 +321,45 @@ class Command:
                     shared_file['path'] = filepath
                 except Exception as e:
                     logger.error(f"共有ファイルID:{shared_file['id']}が取得できませんでした。エラーメッセージ:{e}")
+        return wikis
+
+    def get_project_data(self):
+        """
+        APIデータの取得と整形
+        """
+        if not SPACE_KEY or not API_KEY:
+            raise AttributeError("スペース情報かAPI KEYが取得できませんでした。")
+
+        if not self.args.project:
+            raise AttributeError("プロジェクトIDを引数に指定してください。")
+
+        project = self.get_project()
+        logger.info('Get project data')
+        issues = self.get_project_issues()
+        logger.info('Get project issues')
+        wikis = self.get_wiki_page_list()
+        logger.info('Get project wiki')
+        users = self.get_project_users()
+        logger.info('Get project users')
+
+        # プロジェクトデータにアイコンを追加
+        filepath, response = self.get_project_icon()
+        # FIXME: /outputの直接変換ではなく引数を判定して置換したい
+        project['icon'] = filepath.replace('/output', '')
+
+        # ユーザアイコンの取得用dict作成
+        users_icon = {}
+        for user in users:
+            logger.debug(f"ユーザID: {user['id']} の処理を開始")
+            path = f"users/{user['id']}/"
+            os.makedirs(path, exist_ok=True)
+            try:
+                filepath, response = self.get_user_icon(user['id'], download_path=path)
+                users_icon[user['id']] = filepath
+            except Exception as e:
+                logger.warning(f"ユーザID:{user['id']}のユーザアイコンが取得できませんでした。エラーメッセージ:{e}")
+
+        issues = self.create_issue_template_data(issues, users_icon)
+        wikis = self.create_wiki_template_data(wikis, users_icon)
 
         return project, issues, wikis, users
