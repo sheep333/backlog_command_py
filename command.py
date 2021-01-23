@@ -35,8 +35,8 @@ class Command:
     def exec(self):
         if self.args.command != 'get_project_data':
             # get_project_data以外はそのままコマンド名を実行
+            logger.debug(f"[DEBUG]コマンド: {self.args.command}が実行されました。")
             data = eval(f'self.{self.args.command}')()
-            print(data)
             self.parse.create_output_file(data, self.args)
         else:
             # get_project_dataは各種データをdictで取得
