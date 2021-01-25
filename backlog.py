@@ -42,7 +42,7 @@ class Backlog:
             logger.info(f'[INFO]Saved {data_type}({data["id"]}): {filepath}')
             data['path'] = filepath
         except Exception as e:
-            logger.error(f"{data_type} ID:{data['id']}が取得できませんでした。エラーメッセージ:{e}")
+            logger.error(f"[ERROR]{data_type} ID:{data['id']}が取得できませんでした。エラーメッセージ:{e}")
 
     def _add_user_icon(self, obj, users_icon):
         if 'createdUser' in obj and obj['createdUser']['id'] in users_icon:
@@ -56,7 +56,7 @@ class Backlog:
         if response.status_code == 200:
             return res
         else:
-            logger.error(res)
+            logger.error(f"[ERROR]{res}")
             raise EnvironmentError("[ERROR]APIの情報がうまく取得できませんでした...")
 
     def _convert_res_to_dict(self, response):
