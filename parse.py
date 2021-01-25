@@ -1,6 +1,11 @@
-from jinja2 import Environment, FileSystemLoader, Markup
 import json
+
+from jinja2 import Environment, FileSystemLoader, Markup
 from markdown import markdown
+
+from filters import datetimefilter, datefilter
+
+env = Environment(autoescape=True, loader=FileSystemLoader('./templates/'))
 
 
 class Parse:
@@ -12,7 +17,8 @@ class Parse:
         """
         Jinja2のテンプレートエンジンを使って、HTMLファイルを作成する
         """
-        env = Environment(loader=FileSystemLoader('./templates/'))
+        env.filters['datetimefilter'] = datetimefilter
+        env.filters['datefilter'] = datefilter
         template = env.get_template(template_name)
         output_html = template.render(data)
         html_file = open(f"{output_path}{file_name}", "w", encoding="utf-8")

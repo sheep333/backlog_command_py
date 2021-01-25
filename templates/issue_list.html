@@ -84,12 +84,12 @@
                 {{ term.name }}
                 {% endfor %}
               </td>
-              <td data-column-name="created" class="cell-created">{{ issue.created }}</td>
-              <td data-column-name="startDate" class="cell-start-date">{{ issue.startDate }}</td>
-              <td data-column-name="dueDate" class="cell-limit-date">{{ issue.dueDate }}</td>
+              <td data-column-name="created" class="cell-created">{{ issue.created|datetimefilter }}</td>
+              <td data-column-name="startDate" class="cell-start-date">{{ issue.startDate|datefilter }}</td>
+              <td data-column-name="dueDate" class="cell-limit-date">{{ issue.dueDate|datefilter }}</td>
               <td data-column-name="estimatedHours" class="cell-estimated-hours">{{ issue.estimatedHours }}</td>
               <td data-column-name="actualHours" class="cell-actual-hours">{{ issue.actualHours }}</td>
-              <td data-column-name="updated" class="cell-updated">{{ issue.updated }}</td>
+              <td data-column-name="updated" class="cell-updated">{{ issue.updated|datetimefilter }}</td>
               <td data-column-name="createdUser" class="cell-user">
                 <div class="user-icon-set">
                   <span class="user-icon-set__text">{{ issue.createdUser.name }}</span>

@@ -34,10 +34,10 @@
           </div>
           <div class="ticket__date">
             <span class="ticket__date-item">
-              <span>開始日</span>{{ issue.startDate }}
+              <span>開始日</span>{{ issue.startDate|datefilter }}
             </span>
             <span class="over-due ticket__date-item">
-              <span>期限日</span>{{ issue.dueDate }}
+              <span>期限日</span>{{ issue.dueDate|datefilter }}
               <svg role="image" class="icon -medium over-due__icon">
                 <use xlink:href="/images/svg/sprite.symbol.svg#icon_fire"></use>
               </svg></span>
@@ -59,7 +59,7 @@
                 </span>
                 <span class="user-icon-set__text -collapsed-trigger">
                   <span class="user-icon-set__name"></span><br>
-                  <span class="user-icon-set__sub-line"><span>登録日</span>{{ issue.created }}
+                  <span class="user-icon-set__sub-line"><span>登録日</span>{{ issue.created|datetimefilter }}
                     <span class="ticket__collapsed-summary-separator">/</span><span class="ticket__collapsed-summary">{{ issue.summary }}</span>
                   </span>
                 </span>
@@ -193,7 +193,7 @@
                   <span class="user-icon-set__text comment-item__user-text">
                     <span class="user-icon-set__name">{{ comment.createdUser.name }}</span><br>
                     <span class="user-icon-set__sub-line">
-                      <a href="" class="user-icon-set__sub-line-anchor">{{ comment.created }}</a>
+                      <a href="" class="user-icon-set__sub-line-anchor">{{ comment.created|datetimefilter }}</a>
                       <span class="comment-item__collapsed-summary-separator">/</span>
                       <span class="comment-item__collapsed-summary">{{ comment.summary }}</span>
                     </span>
